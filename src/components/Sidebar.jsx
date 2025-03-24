@@ -1,9 +1,9 @@
-import React from 'react';
-import { 
-  FiHome, 
-  FiCheckSquare, 
-  FiInbox, 
-  FiCalendar, 
+import React from "react";
+import {
+  FiHome,
+  FiCheckSquare,
+  FiInbox,
+  FiCalendar,
   FiFolder,
   FiUsers,
   FiClock,
@@ -12,8 +12,8 @@ import {
   FiBarChart2,
   FiSettings,
   FiHelpCircle,
-  FiLogOut
-} from 'react-icons/fi';
+  FiLogOut,
+} from "react-icons/fi";
 
 const Sidebar = () => {
   return (
@@ -25,18 +25,18 @@ const Sidebar = () => {
         </div>
         <h1 className="text-lg font-bold">Efficio</h1>
       </div>
-      
+
       {/* User Profile Section */}
       <div className="p-4 border-b border-gray-200 flex items-center">
         <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
-          <img 
-            src="https://randomuser.me/api/portraits/men/1.jpg" 
-            alt="Profile" 
+          <img
+            src="https://randomuser.me/api/portraits/men/1.jpg"
+            alt="Profile"
             className="w-full h-full object-cover"
             onError={(e) => {
               e.target.onerror = null;
-              e.target.textContent = '👤';
-              e.target.className = 'text-xl';
+              e.target.textContent = "👤";
+              e.target.className = "text-xl";
             }}
           />
         </div>
@@ -45,11 +45,13 @@ const Sidebar = () => {
           <p className="text-sm text-gray-500">arnoldsmith@gmail.com</p>
         </div>
       </div>
-      
+
       {/* Navigation Menu with Icons */}
       <nav className="flex-1 overflow-y-auto p-2">
         <div className="mb-1">
-          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-1">Main Menu</h3>
+          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-1">
+            Main Menu
+          </h3>
           <ul className="space-y-0.5">
             <li>
               <button className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors">
@@ -85,7 +87,9 @@ const Sidebar = () => {
         </div>
 
         <div className="mb-1">
-          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-1">HR Management</h3>
+          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-1">
+            HR Management
+          </h3>
           <ul className="space-y-0.5">
             <li>
               <button className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors">
@@ -115,7 +119,9 @@ const Sidebar = () => {
         </div>
 
         <div className="mb-1">
-          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-1">Analytics & Reports</h3>
+          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-1">
+            Analytics & Reports
+          </h3>
           <ul className="space-y-0.5">
             <li>
               <button className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors">
@@ -150,6 +156,20 @@ const Sidebar = () => {
           <FiLogOut className="text-lg" />
           <span className="ml-3">Logout</span>
         </button>
+      </div>
+
+      {/* Plan Information Section - Now correctly below Logout */}
+      <div className="p-4 border-t border-gray-200 bg-blue-50 mt-auto">
+        <div className="flex justify-between items-center mb-1">
+          <span className="font-medium text-sm">Basic Plan</span>
+          <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+            Trial
+          </span>
+        </div>
+        <p className="text-xs text-gray-600 mb-2">Trial ends in 4 days</p>
+        <p className="text-xs text-gray-500">
+          You are on a free trial of the Basic plan on monthly billing.
+        </p>
       </div>
     </div>
   );
