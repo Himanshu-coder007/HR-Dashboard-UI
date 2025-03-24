@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from '../components/Header';
-import { FiAlertCircle, FiX } from 'react-icons/fi';
+import { FiAlertCircle, FiX, FiDownload } from 'react-icons/fi';
 
 const Home = () => {
   return (
@@ -17,6 +17,18 @@ const Home = () => {
         </div>
         <button className="text-gray-400 hover:text-gray-600 ml-2">
           <FiX className="text-sm" />
+        </button>
+      </div>
+
+      {/* Greeting and Date with Export Button */}
+      <div className="mx-6 mt-4 flex items-center justify-between">
+        <div>
+          <h2 className="text-xl font-semibold text-gray-800">Hello, Arnold Smith</h2>
+          <p className="text-sm text-gray-500">Wednesday, 06 March 2025</p>
+        </div>
+        <button className="flex items-center space-x-1 bg-blue-500 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded-lg text-sm transition-colors">
+          <FiDownload className="text-sm text-white" />
+          <span className='text-white'>Export</span>
         </button>
       </div>
 
