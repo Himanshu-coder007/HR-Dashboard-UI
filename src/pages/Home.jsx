@@ -2,6 +2,7 @@ import React from 'react';
 import Header from '../components/Header';
 import StatsCards from '../components/StatsCards';
 import Attendance from '../components/Attendance';
+import Task from '../components/Task';
 import { 
   FiAlertCircle, 
   FiX, 
@@ -40,17 +41,19 @@ const Home = () => {
 
       {/* Main Content */}
       <div className="flex-1 p-6 overflow-y-auto">
-        {/* Flex container for StatsCards and Attendance */}
-        <div className="flex flex-col lg:flex-row gap-6">
-          {/* Stats Cards Section - now takes about 60% width */}
+        {/* Top Row - Stats and Attendance */}
+        <div className="flex flex-col lg:flex-row gap-6 mb-6">
           <div className="lg:w-[60%]">
             <StatsCards />
           </div>
-          
-          {/* Attendance Section - now takes about 40% width */}
           <div className="lg:w-[40%]">
             <Attendance />
           </div>
+        </div>
+
+        {/* Bottom Row - Task Component */}
+        <div className="mt-6">
+          <Task />
         </div>
       </div>
     </div>
