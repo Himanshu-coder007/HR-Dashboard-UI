@@ -48,19 +48,16 @@ const Task = () => {
           <div className="text-xs text-gray-500 mb-1 flex items-center justify-center gap-1">
             <FiGrid className="text-xs" /> Kanban
           </div>
-
         </div>
         <div className="text-center">
           <div className="text-xs text-gray-500 mb-1 flex items-center justify-center gap-1">
             <FiTable className="text-xs" /> Table
           </div>
-          
         </div>
         <div className="text-center">
           <div className="text-xs text-gray-500 mb-1 flex items-center justify-center gap-1">
             <FiAlignLeft className="text-xs" /> List View
           </div>
-          
         </div>
       </div>
 
@@ -68,12 +65,17 @@ const Task = () => {
         {tasks.map((task, index) => (
           <div key={index} className="p-3 border border-gray-200 rounded-lg hover:shadow-sm transition-shadow">
             {/* Status count badge at the top of each card */}
-            <div className={`text-xs font-medium mb-2 px-2 py-1 rounded-full text-center ${
-              task.status === "New Request" ? "bg-blue-100 text-blue-800" :
-              task.status === "In Progress" ? "bg-yellow-100 text-yellow-800" :
-              "bg-green-100 text-green-800"
-            }`}>
-              {task.status} {task.count}
+            <div className="flex items-center justify-between mb-2">
+              <div className={`text-xs font-medium px-2 py-1 rounded-full ${
+                task.status === "New Request" ? "bg-blue-100 text-blue-800" :
+                task.status === "In Progress" ? "bg-yellow-100 text-yellow-800" :
+                "bg-green-100 text-green-800"
+              }`}>
+                {task.status} {task.count}
+              </div>
+              <button className="text-xs p-1 rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200">
+                <FiPlus className="text-xs" />
+              </button>
             </div>
             
             <div className="flex justify-between items-start mb-2">
@@ -95,7 +97,6 @@ const Task = () => {
                   <span className="text-xs font-medium px-2 py-1 bg-blue-100 text-blue-800 rounded-full">Engagement</span>
                 )}
               </div>
-             
             </div>
             <h3 className="font-medium text-gray-800 mb-1">{task.title}</h3>
             <p className="text-xs text-gray-500 mb-2 line-clamp-3">{task.description}</p>
