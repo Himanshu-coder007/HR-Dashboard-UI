@@ -5,7 +5,7 @@ const Attendance = () => {
   const yAxisValues = [200, 100, 50, 10];
 
   return (
-    <div className="p-4 shadow-lg rounded-xl bg-white w-full border border-gray-200 h-full">
+    <div className="p-4 shadow-lg rounded-xl bg-white w-full border border-gray-200">
       <div className="flex justify-between items-center mb-3">
         <h2 className="text-md font-semibold text-gray-800">Attendance Report</h2>
         <div className="flex items-center gap-2">
@@ -34,7 +34,7 @@ const Attendance = () => {
       </div>
 
       {/* Chart with Axes */}
-      <div className="flex h-40">
+      <div className="flex h-34">
         {/* Y-axis */}
         <div className="flex flex-col justify-between mr-2">
           {yAxisValues.map((value) => (
@@ -75,7 +75,7 @@ const Attendance = () => {
         </div>
       </div>
 
-      <div className="mt-4 flex justify-end">
+      <div className="mt-3 flex justify-end">
         <button className="text-blue-600 hover:text-blue-800 text-xs font-medium flex items-center">
           View Full Report
           <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
