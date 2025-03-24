@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiPlus, FiFilter, FiList } from 'react-icons/fi';
+import { FiPlus, FiFilter, FiList, FiGrid, FiTable, FiAlignLeft } from 'react-icons/fi';
 
 const Task = () => {
   const tasks = [
@@ -18,7 +18,7 @@ const Task = () => {
       count: 6
     },
     {
-      category: "Engagement",
+      category: "Feedback",
       title: "Employee Satisfaction Survey",
       description: "The HR team has gathered feedback from all departments and is now analyzing the results to identify key areas for improvement.",
       status: "Complete",
@@ -45,28 +45,51 @@ const Task = () => {
 
       <div className="flex gap-4 mb-4">
         <div className="text-center">
-          <div className="text-xs text-gray-500 mb-1">00 Kanban</div>
+          <div className="text-xs text-gray-500 mb-1 flex items-center justify-center gap-1">
+            <FiGrid className="text-xs" /> Kanban
+          </div>
           <div className="text-sm font-medium text-blue-600">New Request <span className="text-gray-500">3</span></div>
         </div>
         <div className="text-center">
-          <div className="text-xs text-gray-500 mb-1">E Table</div>
+          <div className="text-xs text-gray-500 mb-1 flex items-center justify-center gap-1">
+            <FiTable className="text-xs" /> Table
+          </div>
           <div className="text-sm font-medium text-yellow-600">In Progress <span className="text-gray-500">6</span></div>
         </div>
         <div className="text-center">
-          <div className="text-xs text-gray-500 mb-1">List View</div>
+          <div className="text-xs text-gray-500 mb-1 flex items-center justify-center gap-1">
+            <FiAlignLeft className="text-xs" /> List View
+          </div>
           <div className="text-sm font-medium text-green-600">Complete <span className="text-gray-500">12</span></div>
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="grid grid-cols-3 gap-4">
         {tasks.map((task, index) => (
           <div key={index} className="p-3 border border-gray-200 rounded-lg hover:shadow-sm transition-shadow">
             <div className="flex justify-between items-start mb-2">
-              <span className="text-xs font-medium px-2 py-1 bg-gray-100 rounded-full text-gray-600">{task.category}</span>
+              <div className="flex gap-1">
+                <span className={`text-xs font-medium px-2 py-1 rounded-full ${
+                  task.category === "Recruitment" ? "bg-blue-100 text-blue-800" :
+                  task.category === "Finance" ? "bg-pink-100 text-pink-800" :
+                  "bg-violet-100 text-violet-800"
+                }`}>
+                  {task.category}
+                </span>
+                {task.category === "Recruitment" && (
+                  <span className="text-xs font-medium px-2 py-1 bg-green-100 text-green-800 rounded-full">Compliance</span>
+                )}
+                {task.category === "Finance" && (
+                  <span className="text-xs font-medium px-2 py-1 bg-orange-100 text-orange-800 rounded-full">Compensation</span>
+                )}
+                {task.category === "Feedback" && (
+                  <span className="text-xs font-medium px-2 py-1 bg-blue-100 text-blue-800 rounded-full">Engagement</span>
+                )}
+              </div>
               <span className="text-xs text-gray-500">{task.status}</span>
             </div>
             <h3 className="font-medium text-gray-800 mb-1">{task.title}</h3>
-            <p className="text-xs text-gray-500 mb-2">{task.description}</p>
+            <p className="text-xs text-gray-500 mb-2 line-clamp-3">{task.description}</p>
             <button className="text-xs text-blue-600 hover:text-blue-800 flex items-center">
               View Details
               <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
