@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../components/Header';
 import StatsCards from '../components/StatsCards';
+import Attendance from '../components/Attendance';
 import { 
   FiAlertCircle, 
   FiX, 
@@ -40,7 +41,15 @@ const Home = () => {
       {/* Main Content */}
       <div className="flex-1 p-6 overflow-y-auto">
         <h1 className="text-2xl font-bold text-gray-800 mb-6">Dashboard Overview</h1>
+        
+        {/* Stats Cards Section */}
         <StatsCards />
+        
+        {/* Attendance Section */}
+        <div className="mt-8">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Attendance</h2>
+          <Attendance />
+        </div>
       </div>
     </div>
   );
