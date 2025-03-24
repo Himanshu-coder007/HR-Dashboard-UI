@@ -1,8 +1,8 @@
 import React from 'react';
 import { 
-  FiUsers, 
-  FiBriefcase, 
-  FiDollarSign, 
+  FiUsers,
+  FiBriefcase,
+  FiDollarSign,
   FiClock,
   FiTrendingUp,
   FiTrendingDown,
@@ -11,9 +11,9 @@ import {
 
 const StatsCards = () => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-      {/* Card 1: Total Employees */}
-      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Total Employees Card */}
+      <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="p-2 rounded-full bg-blue-50 text-blue-600">
@@ -34,8 +34,8 @@ const StatsCards = () => {
         </div>
       </div>
 
-      {/* Card 2: Job Applicants */}
-      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+      {/* Job Applicants Card */}
+      <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="p-2 rounded-full bg-purple-50 text-purple-600">
@@ -56,8 +56,8 @@ const StatsCards = () => {
         </div>
       </div>
 
-      {/* Card 3: Total Revenue */}
-      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+      {/* Total Revenue Card */}
+      <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="p-2 rounded-full bg-green-50 text-green-600">
@@ -78,8 +78,8 @@ const StatsCards = () => {
         </div>
       </div>
 
-      {/* Card 4: Attendance Rate */}
-      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+      {/* Attendance Rate Card */}
+      <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="p-2 rounded-full bg-orange-50 text-orange-600">
