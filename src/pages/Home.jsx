@@ -1,13 +1,14 @@
 import React from 'react';
 import Header from '../components/Header';
-import { FiAlertCircle, FiX, FiDownload } from 'react-icons/fi';
+import { FiAlertCircle, FiX } from 'react-icons/fi';
+import StatsCards from '../components/StatsCards';
 
 const Home = () => {
   return (
     <div className="flex flex-col h-full bg-white">
       <Header />
       
-      {/* Compact Notification Banner */}
+      {/* Notification Banner */}
       <div className="bg-white border border-gray-200 rounded-lg mx-4 mt-3 px-3 py-2 flex items-center justify-between">
         <div className="flex items-center justify-center w-full">
           <FiAlertCircle className="text-blue-500 mr-2 text-sm" />
@@ -20,22 +21,16 @@ const Home = () => {
         </button>
       </div>
 
-      {/* Greeting and Date with Export Button */}
-      <div className="mx-6 mt-4 flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-semibold text-gray-800">Hello, Arnold Smith</h2>
-          <p className="text-sm text-gray-500">Wednesday, 06 March 2025</p>
-        </div>
-        <button className="flex items-center space-x-1 bg-blue-500 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded-lg text-sm transition-colors">
-          <FiDownload className="text-sm text-white" />
-          <span className='text-white'>Export</span>
-        </button>
+      {/* Greeting and Date */}
+      <div className="mx-6 mt-4">
+        <h2 className="text-xl font-semibold text-gray-800">Hello, Arnold Smith</h2>
+        <p className="text-sm text-gray-500">Wednesday, 06 March 2025</p>
       </div>
 
       {/* Main Content */}
       <div className="flex-1 p-6 overflow-y-auto">
         <h1 className="text-2xl font-bold text-gray-800 mb-6">Dashboard Overview</h1>
-        {/* Your main content will go here */}
+        <StatsCards />
       </div>
     </div>
   );
