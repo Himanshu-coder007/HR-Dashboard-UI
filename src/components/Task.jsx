@@ -372,7 +372,7 @@ const TaskCard = ({ task, onEdit, onDelete, onStatusChange, statusColumns }) => 
           task.status === "In Progress" ? "bg-yellow-100 text-yellow-800" :
           "bg-green-100 text-green-800"
         }`}>
-          {task.status} {task.count}
+          {task.status}
         </div>
         <div className="flex gap-1">
           <button 

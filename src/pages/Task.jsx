@@ -626,31 +626,6 @@ const TaskCard = ({ task, onEdit, onDelete, onStatusChange, statusColumns }) => 
   return (
     <>
       <div className="flex items-center justify-between mb-2">
-        <div className={`text-xs font-medium px-2 py-1 rounded-full ${
-          task.status === "New Request" ? "bg-blue-100 text-blue-800" :
-          task.status === "In Progress" ? "bg-yellow-100 text-yellow-800" :
-          "bg-green-100 text-green-800"
-        }`}>
-          {task.status} {task.count}
-        </div>
-        <div className="flex space-x-1">
-          <button 
-            onClick={() => onEdit(task)}
-            className="text-blue-600 hover:text-blue-800 p-1 rounded-full hover:bg-blue-100"
-            title="Edit"
-          >
-            <FiEdit2 size={14} />
-          </button>
-          <button 
-            onClick={() => onDelete(task.id)}
-            className="text-red-600 hover:text-red-800 p-1 rounded-full hover:bg-red-100"
-            title="Delete"
-          >
-            <FiTrash2 size={14} />
-          </button>
-        </div>
-      </div>
-      
       <div className="flex justify-between items-start mb-2">
         <div className="flex gap-1">
           <span className={`text-xs font-medium px-2 py-1 rounded-full ${
@@ -677,6 +652,25 @@ const TaskCard = ({ task, onEdit, onDelete, onStatusChange, statusColumns }) => 
           ))}
         </div>
       </div>
+        <div className="flex space-x-1">
+          <button 
+            onClick={() => onEdit(task)}
+            className="text-blue-600 hover:text-blue-800 p-1 rounded-full hover:bg-blue-100"
+            title="Edit"
+          >
+            <FiEdit2 size={14} />
+          </button>
+          <button 
+            onClick={() => onDelete(task.id)}
+            className="text-red-600 hover:text-red-800 p-1 rounded-full hover:bg-red-100"
+            title="Delete"
+          >
+            <FiTrash2 size={14} />
+          </button>
+        </div>
+      </div>
+      
+      
       <h3 className="font-medium text-gray-800 mb-1">{task.title}</h3>
       <p className="text-xs text-gray-500 mb-2 line-clamp-3">{task.description}</p>
       <div className="flex justify-between items-center">
