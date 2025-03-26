@@ -1,14 +1,23 @@
-import { useState } from 'react'
-import Dashboard from './pages/Dashboard'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Dashboard from './pages/Dashboard';
+import Home from './pages/Home';
+import Task from './pages/Task';
+import Inbox from './pages/Inbox';
+import Calender from './pages/Calender';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <Dashboard/>
-    </>
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<Dashboard />}>
+          <Route index element={<Home />} />
+          <Route path="tasks" element={<Task />} />
+          <Route path="inbox" element={<Inbox />} />
+          <Route path="calender" element={<Calender />} />
+        </Route>
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;

@@ -1,6 +1,6 @@
 import React from 'react';
 import Sidebar from '../components/Sidebar';
-import Home from './Home';
+import { Outlet } from 'react-router-dom';
 
 const Dashboard = () => {
   return (
@@ -10,7 +10,7 @@ const Dashboard = () => {
       
       {/* Main content area */}
       <main className="flex-1 flex flex-col overflow-y-auto">
-        <Home />
+        <Outlet /> {/* This will render the child routes */}
       </main>
     </div>
   );

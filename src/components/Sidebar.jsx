@@ -1,4 +1,4 @@
-import React from "react";
+import { Link } from 'react-router-dom';
 import {
   FiHome,
   FiCheckSquare,
@@ -54,28 +54,40 @@ const Sidebar = () => {
           </h3>
           <ul className="space-y-0.5">
             <li>
-              <button className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors">
+              <Link 
+                to="/" 
+                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
                 <FiHome className="text-lg" />
                 <span className="ml-3">Dashboard</span>
-              </button>
+              </Link>
             </li>
             <li>
-              <button className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors">
+              <Link 
+                to="/tasks" 
+                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
                 <FiCheckSquare className="text-lg" />
                 <span className="ml-3">Tasks</span>
-              </button>
+              </Link>
             </li>
             <li>
-              <button className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors">
+              <Link 
+                to="/inbox" 
+                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
                 <FiInbox className="text-lg" />
                 <span className="ml-3">Inbox</span>
-              </button>
+              </Link>
             </li>
             <li>
-              <button className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors">
+              <Link 
+                to="/calender" 
+                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
                 <FiCalendar className="text-lg" />
                 <span className="ml-3">Calendar</span>
-              </button>
+              </Link>
             </li>
             <li>
               <button className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors">
@@ -158,7 +170,7 @@ const Sidebar = () => {
         </button>
       </div>
 
-      {/* Plan Information Section - Now correctly below Logout */}
+      {/* Plan Information Section */}
       <div className="p-4 border-t border-gray-200 bg-blue-50 mt-auto">
         <div className="flex justify-between items-center mb-1">
           <span className="font-medium text-sm">Basic Plan</span>
