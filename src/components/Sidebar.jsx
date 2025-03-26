@@ -104,16 +104,22 @@ const Sidebar = () => {
           </h3>
           <ul className="space-y-0.5">
             <li>
-              <button className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors">
+              <Link 
+                to="/employees" 
+                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
                 <FiUsers className="text-lg" />
                 <span className="ml-3">Employees</span>
-              </button>
+              </Link>
             </li>
             <li>
-              <button className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors">
+              <Link 
+                to="/attendance" 
+                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
                 <FiClock className="text-lg" />
                 <span className="ml-3">Attendance</span>
-              </button>
+              </Link>
             </li>
             <li>
               <button className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors">
