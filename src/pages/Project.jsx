@@ -1,5 +1,18 @@
 import { useState, useEffect } from 'react';
 import { FiFolder, FiUsers, FiClock, FiPlus, FiEdit2, FiTrash2, FiCheck, FiPaperclip, FiMessageSquare } from 'react-icons/fi';
+import { Doughnut, Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from 'chart.js';
+
+// Register ChartJS components
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title
+);
 
 const Projects = () => {
   // State for projects and UI controls
@@ -73,6 +86,25 @@ const Projects = () => {
         tasks: [],
         comments: [],
         attachments: []
+      },
+      {
+        id: 3,
+        name: 'Marketing Campaign',
+        description: 'Q3 marketing campaign for new product launch',
+        startDate: '2023-05-15',
+        dueDate: '2023-06-30',
+        status: 'completed',
+        priority: 'high',
+        teamMembers: [2, 3],
+        tasks: [
+          { id: 1, title: 'Create Ad Designs', status: 'done', assignee: 2, dueDate: '2023-05-25' },
+          { id: 2, title: 'Write Copy', status: 'done', assignee: 3, dueDate: '2023-05-20' },
+          { id: 3, title: 'Launch Campaign', status: 'done', assignee: 3, dueDate: '2023-06-01' }
+        ],
+        comments: [
+          { id: 1, author: 3, text: 'Campaign launched successfully', date: '2023-06-01' }
+        ],
+        attachments: []
       }
     ];
     setProjects(sampleProjects);
@@ -91,6 +123,85 @@ const Projects = () => {
     if (!project.tasks || project.tasks.length === 0) return 0;
     const completedTasks = project.tasks.filter(task => task.status === 'done').length;
     return Math.round((completedTasks / project.tasks.length) * 100);
+  };
+
+  // Prepare data for the status chart
+  const getStatusData = () => {
+    const statusCounts = {
+      'not started': 0,
+      'in progress': 0,
+      'completed': 0
+    };
+
+    projects.forEach(project => {
+      statusCounts[project.status]++;
+    });
+
+    return {
+      labels: ['Not Started', 'In Progress', 'Completed'],
+      datasets: [
+        {
+          label: 'Projects by Status',
+          data: Object.values(statusCounts),
+          backgroundColor: [
+            'rgba(99, 102, 241, 0.7)',  // indigo-500
+            'rgba(59, 130, 246, 0.7)',  // blue-500
+            'rgba(16, 185, 129, 0.7)'  // green-500
+          ],
+          borderColor: [
+            'rgba(99, 102, 241, 1)',
+            'rgba(59, 130, 246, 1)',
+            'rgba(16, 185, 129, 1)'
+          ],
+          borderWidth: 1,
+        },
+      ],
+    };
+  };
+
+  // Prepare data for the priority chart
+  const getPriorityData = () => {
+    const priorityCounts = {
+      'low': 0,
+      'medium': 0,
+      'high': 0
+    };
+
+    projects.forEach(project => {
+      priorityCounts[project.priority]++;
+    });
+
+    return {
+      labels: ['Low', 'Medium', 'High'],
+      datasets: [
+        {
+          label: 'Projects by Priority',
+          data: Object.values(priorityCounts),
+          backgroundColor: [
+            'rgba(16, 185, 129, 0.7)',  // green-500
+            'rgba(234, 179, 8, 0.7)',   // yellow-500
+            'rgba(239, 68, 68, 0.7)'    // red-500
+          ],
+          borderColor: [
+            'rgba(16, 185, 129, 1)',
+            'rgba(234, 179, 8, 1)',
+            'rgba(239, 68, 68, 1)'
+          ],
+          borderWidth: 1,
+        },
+      ],
+    };
+  };
+
+  // Chart options
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'bottom',
+      },
+    },
+    maintainAspectRatio: false,
   };
 
   // Handle project form changes
@@ -254,7 +365,7 @@ const Projects = () => {
   };
 
   return (
-    <div className=" bg-white min-h-screen container mx-auto px-4 py-8">
+    <div className="bg-white min-h-screen container mx-auto px-4 py-8">
       {!selectedProject ? (
         // Project List View
         <div>
@@ -266,6 +377,22 @@ const Projects = () => {
             >
               <FiPlus className="mr-2" /> New Project
             </button>
+          </div>
+
+          {/* Project Stats and Charts */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div className="bg-white rounded-lg shadow-sm border p-6">
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">Projects by Status</h2>
+              <div className="h-64">
+                <Doughnut data={getStatusData()} options={chartOptions} />
+              </div>
+            </div>
+            <div className="bg-white rounded-lg shadow-sm border p-6">
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">Projects by Priority</h2>
+              <div className="h-64">
+                <Bar data={getPriorityData()} options={chartOptions} />
+              </div>
+            </div>
           </div>
 
           {/* Filters and Search */}
