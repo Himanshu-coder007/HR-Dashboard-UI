@@ -79,37 +79,42 @@ const Task = () => {
     ];
   });
 
-  // Employee data
+  // Employee data with roles
   const [employees] = useState([
     {
       id: 1,
       username: "john_doe",
       email: "john.doe@example.com",
-      roles: ["developer"]
+      roles: ["developer"],
+      roleDisplay: "Developer"
     },
     {
       id: 2,
       username: "jane_smith",
       email: "jane.smith@example.com",
-      roles: ["designer"]
+      roles: ["designer"],
+      roleDisplay: "Designer"
     },
     {
       id: 3,
       username: "alice_jones",
       email: "alice.jones@example.com",
-      roles: ["project manager"]
+      roles: ["project manager"],
+      roleDisplay: "Project Manager"
     },
     {
       id: 4,
       username: "bob_williams",
       email: "bob.williams@example.com",
-      roles: ["business analyst"]
+      roles: ["business analyst"],
+      roleDisplay: "Business Analyst"
     },
     {
       id: 5,
       username: "charlie_brown",
       email: "charlie.brown@example.com",
-      roles: ["developer", "designer"]
+      roles: ["developer", "designer"],
+      roleDisplay: "Developer/Designer"
     }
   ]);
 
@@ -478,7 +483,7 @@ const Task = () => {
                       </div>
                       <div>
                         <p className="font-medium text-gray-800">{employee.username}</p>
-                        <p className="text-xs text-gray-500">{employee.email}</p>
+                        <p className="text-xs text-gray-500">{employee.roleDisplay} • {employee.email}</p>
                       </div>
                     </div>
                     {(assigningTask.assignedTo || []).includes(employee.id) && (
@@ -680,14 +685,20 @@ const Task = () => {
                             <div 
                               key={index} 
                               className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 border-2 border-white"
-                              title={employee.username}
+                              title={`${employee.username} (${employee.roleDisplay})`}
                             >
                               {employee.username.charAt(0).toUpperCase()}
                             </div>
                           ) : null;
                         })}
                         {(task.assignedTo || []).length > 3 && (
-                          <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-800 border-2 border-white">
+                          <div 
+                            className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-800 border-2 border-white"
+                            title={`${(task.assignedTo || []).slice(3).map(id => {
+                              const e = employees.find(emp => emp.id === id);
+                              return e ? `${e.username} (${e.roleDisplay})` : '';
+                            }).join(', ')}`}
+                          >
                             +{(task.assignedTo || []).length - 3}
                           </div>
                         )}
@@ -769,14 +780,20 @@ const Task = () => {
                           <div 
                             key={index} 
                             className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 border-2 border-white text-xs"
-                            title={employee.username}
+                            title={`${employee.username} (${employee.roleDisplay})`}
                           >
                             {employee.username.charAt(0).toUpperCase()}
                           </div>
                         ) : null;
                       })}
                       {(task.assignedTo || []).length > 3 && (
-                        <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-800 border-2 border-white text-xs">
+                        <div 
+                          className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-800 border-2 border-white text-xs"
+                          title={`${(task.assignedTo || []).slice(3).map(id => {
+                            const e = employees.find(emp => emp.id === id);
+                            return e ? `${e.username} (${e.roleDisplay})` : '';
+                          }).join(', ')}`}
+                        >
                           +{(task.assignedTo || []).length - 3}
                         </div>
                       )}
@@ -889,14 +906,20 @@ const TaskCard = ({ task, onEdit, onDelete, onStatusChange, onAssign, statusColu
               <div 
                 key={index} 
                 className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 border-2 border-white text-xs"
-                title={employee.username}
+                title={`${employee.username} (${employee.roleDisplay})`}
               >
                 {employee.username.charAt(0).toUpperCase()}
               </div>
             ) : null;
           })}
           {(task.assignedTo || []).length > 3 && (
-            <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-800 border-2 border-white text-xs">
+            <div 
+              className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-800 border-2 border-white text-xs"
+              title={`${(task.assignedTo || []).slice(3).map(id => {
+                const e = employees.find(emp => emp.id === id);
+                return e ? `${e.username} (${e.roleDisplay})` : '';
+              }).join(', ')}`}
+            >
               +{(task.assignedTo || []).length - 3}
             </div>
           )}
