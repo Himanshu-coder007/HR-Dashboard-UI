@@ -6,6 +6,7 @@ import Inbox from './pages/Inbox';
 import Calender from './pages/Calender';
 import Employees from './pages/Employees';
 import Attendance from './pages/Attendance';
+import Project from './pages/Project';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="calender" element={<Calender />} />
           <Route path="employees" element={<Employees />} />
           <Route path="attendance" element={<Attendance />} />
+          <Route path="projects" element={<Project />} />
         </Route>
       </Routes>
     </Router>

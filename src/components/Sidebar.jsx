@@ -90,11 +90,15 @@ const Sidebar = () => {
               </Link>
             </li>
             <li>
-              <button className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors">
+              <Link 
+                to="/projects" 
+                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
                 <FiFolder className="text-lg" />
                 <span className="ml-3">Projects</span>
-              </button>
+              </Link>
             </li>
+            
           </ul>
         </div>
 
