@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FiCalendar, FiPlus, FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi';
+import { FiCalendar, FiPlus, FiChevronLeft, FiChevronRight, FiX, FiClock } from 'react-icons/fi';
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, parseISO } from 'date-fns';
 
 // Helper functions for localStorage
@@ -28,7 +28,8 @@ const CalendarPage = () => {
   const [newEvent, setNewEvent] = useState({
     title: '',
     date: format(new Date(), 'yyyy-MM-dd'),
-    time: '09:00',
+    startTime: '09:00',
+    endTime: '10:00',
     type: 'meeting',
     location: '',
     participants: ''
@@ -41,7 +42,8 @@ const CalendarPage = () => {
         id: 1,
         title: 'Team Standup',
         date: '2023-06-15',
-        time: '09:30',
+        startTime: '09:30',
+        endTime: '10:00',
         type: 'meeting',
         participants: ['John', 'Sarah', 'Mike']
       },
@@ -49,7 +51,8 @@ const CalendarPage = () => {
         id: 2,
         title: 'Project Deadline',
         date: '2023-06-20',
-        time: '17:00',
+        startTime: '17:00',
+        endTime: '17:30',
         type: 'deadline',
         description: 'Submit final project deliverables'
       },
@@ -57,7 +60,8 @@ const CalendarPage = () => {
         id: 3,
         title: 'Client Meeting',
         date: '2023-06-22',
-        time: '14:00',
+        startTime: '14:00',
+        endTime: '15:30',
         type: 'meeting',
         location: 'Conference Room A'
       }
@@ -111,6 +115,13 @@ const CalendarPage = () => {
   // Handle adding new event
   const handleAddEvent = (e) => {
     e.preventDefault();
+    
+    // Validate end time is after start time
+    if (newEvent.endTime <= newEvent.startTime) {
+      alert('End time must be after start time');
+      return;
+    }
+    
     const participantsArray = newEvent.participants 
       ? newEvent.participants.split(',').map(p => p.trim())
       : [];
@@ -119,7 +130,8 @@ const CalendarPage = () => {
       id: Date.now(),
       title: newEvent.title,
       date: newEvent.date,
-      time: newEvent.time,
+      startTime: newEvent.startTime,
+      endTime: newEvent.endTime,
       type: newEvent.type,
       ...(newEvent.location && { location: newEvent.location }),
       ...(participantsArray.length > 0 && { participants: participantsArray })
@@ -130,7 +142,8 @@ const CalendarPage = () => {
     setNewEvent({
       title: '',
       date: format(selectedDate, 'yyyy-MM-dd'),
-      time: '09:00',
+      startTime: '09:00',
+      endTime: '10:00',
       type: 'meeting',
       location: '',
       participants: ''
@@ -161,6 +174,11 @@ const CalendarPage = () => {
       ...prev,
       date: format(day, 'yyyy-MM-dd')
     }));
+  };
+
+  // Format time range for display
+  const formatTimeRange = (startTime, endTime) => {
+    return `${startTime} - ${endTime}`;
   };
 
   return (
@@ -248,7 +266,7 @@ const CalendarPage = () => {
                         key={event.id}
                         className="text-xs p-1 rounded truncate bg-blue-100 text-blue-800"
                       >
-                        {event.time} {event.title}
+                        {formatTimeRange(event.startTime, event.endTime)} {event.title}
                       </div>
                     ))}
                     {dayTasks.slice(0, 2).map(task => (
@@ -300,9 +318,12 @@ const CalendarPage = () => {
               <div className="space-y-2">
                 {getEventsForDate(selectedDate).map(event => (
                   <div key={event.id} className="p-3 border border-gray-200 rounded-lg">
-                    <div className="flex justify-between">
+                    <div className="flex justify-between items-start">
                       <h5 className="font-medium">{event.title}</h5>
-                      <span className="text-sm text-gray-500">{event.time}</span>
+                      <div className="flex items-center text-sm text-gray-500">
+                        <FiClock className="mr-1" size={12} />
+                        {formatTimeRange(event.startTime, event.endTime)}
+                      </div>
                     </div>
                     {event.location && (
                       <p className="text-xs text-gray-500 mt-1">📍 {event.location}</p>
@@ -412,12 +433,24 @@ const CalendarPage = () => {
                     required
                   />
                 </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Start Time</label>
                   <input
                     type="time"
-                    value={newEvent.time}
-                    onChange={(e) => setNewEvent({...newEvent, time: e.target.value})}
+                    value={newEvent.startTime}
+                    onChange={(e) => setNewEvent({...newEvent, startTime: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">End Time</label>
+                  <input
+                    type="time"
+                    value={newEvent.endTime}
+                    onChange={(e) => setNewEvent({...newEvent, endTime: e.target.value})}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />

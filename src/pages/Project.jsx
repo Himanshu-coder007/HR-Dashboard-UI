@@ -365,7 +365,7 @@ const Projects = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen container mx-auto px-4 py-8">
+    <div className="bg-white h-screen overflow-auto container mx-auto px-4 py-8">
       {!selectedProject ? (
         // Project List View
         <div>
