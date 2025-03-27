@@ -1,6 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FiCalendar, FiPlus, FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi';
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, parseISO } from 'date-fns';
+
+// Helper functions for localStorage
+const loadFromLocalStorage = (key, defaultValue) => {
+  try {
+    const saved = localStorage.getItem(key);
+    return saved ? JSON.parse(saved) : defaultValue;
+  } catch (error) {
+    console.error('Error loading from localStorage:', error);
+    return defaultValue;
+  }
+};
+
+const saveToLocalStorage = (key, value) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    console.error('Error saving to localStorage:', error);
+  }
+};
 
 const CalendarPage = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -15,58 +34,70 @@ const CalendarPage = () => {
     participants: ''
   });
 
-  // Sample events data
-  const [events, setEvents] = useState([
-    {
-      id: 1,
-      title: 'Team Standup',
-      date: '2023-06-15',
-      time: '09:30',
-      type: 'meeting',
-      participants: ['John', 'Sarah', 'Mike']
-    },
-    {
-      id: 2,
-      title: 'Project Deadline',
-      date: '2023-06-20',
-      time: '17:00',
-      type: 'deadline',
-      description: 'Submit final project deliverables'
-    },
-    {
-      id: 3,
-      title: 'Client Meeting',
-      date: '2023-06-22',
-      time: '14:00',
-      type: 'meeting',
-      location: 'Conference Room A'
-    }
-  ]);
+  // Load events and tasks from localStorage on component mount
+  const [events, setEvents] = useState(() => 
+    loadFromLocalStorage('calendarEvents', [
+      {
+        id: 1,
+        title: 'Team Standup',
+        date: '2023-06-15',
+        time: '09:30',
+        type: 'meeting',
+        participants: ['John', 'Sarah', 'Mike']
+      },
+      {
+        id: 2,
+        title: 'Project Deadline',
+        date: '2023-06-20',
+        time: '17:00',
+        type: 'deadline',
+        description: 'Submit final project deliverables'
+      },
+      {
+        id: 3,
+        title: 'Client Meeting',
+        date: '2023-06-22',
+        time: '14:00',
+        type: 'meeting',
+        location: 'Conference Room A'
+      }
+    ])
+  );
 
-  // Sample tasks data
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: 'Review design mockups',
-      dueDate: '2023-06-18',
-      completed: false,
-      priority: 'high'
-    },
-    {
-      id: 2,
-      title: 'Prepare quarterly report',
-      dueDate: '2023-06-25',
-      completed: false,
-      priority: 'medium'
-    },
-    {
-      id: 3,
-      title: 'Update project documentation',
-      dueDate: '2023-06-30',
-      completed: true,
-      priority: 'low'
-    }
-  ]);
+  const [tasks, setTasks] = useState(() => 
+    loadFromLocalStorage('calendarTasks', [
+      {
+        id: 1,
+        title: 'Review design mockups',
+        dueDate: '2023-06-18',
+        completed: false,
+        priority: 'high'
+      },
+      {
+        id: 2,
+        title: 'Prepare quarterly report',
+        dueDate: '2023-06-25',
+        completed: false,
+        priority: 'medium'
+      },
+      {
+        id: 3,
+        title: 'Update project documentation',
+        dueDate: '2023-06-30',
+        completed: true,
+        priority: 'low'
+      }
+    ])
+  );
+
+  // Save to localStorage whenever events or tasks change
+  useEffect(() => {
+    saveToLocalStorage('calendarEvents', events);
+  }, [events]);
+
+  useEffect(() => {
+    saveToLocalStorage('calendarTasks', tasks);
+  }, [tasks]);
 
   // Calendar navigation functions
   const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
@@ -104,6 +135,13 @@ const CalendarPage = () => {
       location: '',
       participants: ''
     });
+  };
+
+  // Handle task completion toggle
+  const toggleTaskCompletion = (taskId) => {
+    setTasks(tasks.map(task => 
+      task.id === taskId ? { ...task, completed: !task.completed } : task
+    ));
   };
 
   // Get events for selected date
@@ -303,9 +341,12 @@ const CalendarPage = () => {
                       task.completed ? 'border-green-200 bg-green-50' : 'border-gray-200'
                     }`}
                   >
-                    <div className={`w-4 h-4 mt-0.5 mr-2 rounded-full border ${
-                      task.completed ? 'bg-green-500 border-green-500' : 'border-gray-300'
-                    }`}></div>
+                    <button 
+                      onClick={() => toggleTaskCompletion(task.id)}
+                      className={`w-4 h-4 mt-0.5 mr-2 rounded-full border ${
+                        task.completed ? 'bg-green-500 border-green-500' : 'border-gray-300'
+                      }`}
+                    ></button>
                     <div className="flex-1">
                       <div className="flex justify-between">
                         <h5 className={`font-medium ${
@@ -318,7 +359,10 @@ const CalendarPage = () => {
                         )}
                       </div>
                       {!task.completed && (
-                        <button className="text-xs text-blue-500 hover:text-blue-700 mt-1">
+                        <button 
+                          onClick={() => toggleTaskCompletion(task.id)}
+                          className="text-xs text-blue-500 hover:text-blue-700 mt-1"
+                        >
                           Mark Complete
                         </button>
                       )}
