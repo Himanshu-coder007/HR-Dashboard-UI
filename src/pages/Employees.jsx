@@ -112,7 +112,9 @@ const orgChartData = {
 };
 
 // Node colors based on position
-const getNodeColor = (title) => {
+const getNodeColor = (title, isHighlighted) => {
+  if (isHighlighted) return "bg-pink-600 text-white border-4 border-yellow-300";
+  
   switch (title) {
     case "CEO":
       return "bg-blue-600 text-white";
@@ -149,8 +151,9 @@ const getInitials = (name) => {
 };
 
 // Custom render function for tree nodes
-const renderCustomNode = ({ nodeDatum, toggleNode }) => {
-  const colorClass = getNodeColor(nodeDatum.attributes?.title);
+const renderCustomNode = ({ nodeDatum, toggleNode, hierarchyPointNode }, highlightedNode) => {
+  const isHighlighted = highlightedNode === nodeDatum.name;
+  const colorClass = getNodeColor(nodeDatum.attributes?.title, isHighlighted);
 
   return (
     <foreignObject width="250" height="150" x="-125" y="-60">
@@ -159,7 +162,7 @@ const renderCustomNode = ({ nodeDatum, toggleNode }) => {
         className={`flex items-center gap-4 cursor-pointer ${colorClass} border border-gray-300 rounded-lg shadow-lg p-4 transition-all transform hover:scale-105 hover:shadow-2xl`}
       >
         {/* Circular Avatar with Initials */}
-        <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-lg font-bold text-gray-700 border">
+        <div className={`w-12 h-12 rounded-full ${isHighlighted ? 'bg-yellow-300' : 'bg-gray-200'} flex items-center justify-center text-lg font-bold ${isHighlighted ? 'text-pink-600' : 'text-gray-700'} border`}>
           {getInitials(nodeDatum.name)}
         </div>
 
@@ -195,6 +198,9 @@ const renderCustomNode = ({ nodeDatum, toggleNode }) => {
 const EmployeeTree = () => {
   const treeContainerRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [highlightedNode, setHighlightedNode] = useState(null);
+  const [treeData, setTreeData] = useState(orgChartData);
 
   // Adjust tree size dynamically based on container size
   useEffect(() => {
@@ -206,23 +212,114 @@ const EmployeeTree = () => {
     }
   }, []);
 
+  // Function to search for an employee in the tree
+  const searchEmployee = (term) => {
+    if (!term.trim()) {
+      setHighlightedNode(null);
+      return;
+    }
+
+    // Convert search term to lowercase for case-insensitive search
+    const searchTermLower = term.toLowerCase();
+
+    // Recursive function to find the employee
+    const findEmployee = (node) => {
+      if (node.name.toLowerCase().includes(searchTermLower)) {
+        return node.name;
+      }
+
+      if (node.children) {
+        for (const child of node.children) {
+          const found = findEmployee(child);
+          if (found) return found;
+        }
+      }
+
+      return null;
+    };
+
+    const foundEmployee = findEmployee(treeData);
+    setHighlightedNode(foundEmployee);
+  };
+
+  // Handle search input changes
+  const handleSearchChange = (e) => {
+    const term = e.target.value;
+    setSearchTerm(term);
+    searchEmployee(term);
+  };
+
   return (
     <div
       ref={treeContainerRef}
       className="w-full h-screen bg-gradient-to-br from-blue-100 to-gray-50 overflow-hidden p-5"
     >
+      {/* Search Bar */}
+      <div className="relative mb-4 max-w-md mx-auto">
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <svg
+            className="h-5 w-5 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+        </div>
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={handleSearchChange}
+          placeholder="Search employee by name..."
+          className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+        />
+        {searchTerm && (
+          <button
+            onClick={() => {
+              setSearchTerm("");
+              setHighlightedNode(null);
+            }}
+            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+          >
+            <svg
+              className="h-5 w-5 text-gray-400 hover:text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        )}
+      </div>
+
+      {/* Tree Visualization */}
       <Tree
-        data={orgChartData}
+        data={treeData}
         orientation="vertical"
         collapsible={true}
-        shouldCollapseNeighborNodes={false} // Prevents auto-collapsing
+        shouldCollapseNeighborNodes={false}
         translate={{ x: dimensions.width / 2, y: 100 }}
         pathFunc="diagonal"
         nodeSize={{ x: 260, y: 170 }}
         separation={{ siblings: 1.5, nonSiblings: 2 }}
         zoomable={true}
-        initialDepth={Infinity} // Expands all nodes by default
-        renderCustomNodeElement={(rd3tProps) => renderCustomNode(rd3tProps)}
+        initialDepth={Infinity}
+        renderCustomNodeElement={(rd3tProps) => 
+          renderCustomNode(rd3tProps, highlightedNode)
+        }
       />
     </div>
   );
