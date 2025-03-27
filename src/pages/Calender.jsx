@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FiCalendar, FiPlus, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FiCalendar, FiPlus, FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi';
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, parseISO } from 'date-fns';
 
 const CalendarPage = () => {
@@ -10,7 +10,9 @@ const CalendarPage = () => {
     title: '',
     date: format(new Date(), 'yyyy-MM-dd'),
     time: '09:00',
-    type: 'meeting'
+    type: 'meeting',
+    location: '',
+    participants: ''
   });
 
   // Sample events data
@@ -78,17 +80,29 @@ const CalendarPage = () => {
   // Handle adding new event
   const handleAddEvent = (e) => {
     e.preventDefault();
+    const participantsArray = newEvent.participants 
+      ? newEvent.participants.split(',').map(p => p.trim())
+      : [];
+    
     const newEventObj = {
       id: Date.now(),
-      ...newEvent
+      title: newEvent.title,
+      date: newEvent.date,
+      time: newEvent.time,
+      type: newEvent.type,
+      ...(newEvent.location && { location: newEvent.location }),
+      ...(participantsArray.length > 0 && { participants: participantsArray })
     };
+    
     setEvents([...events, newEventObj]);
     setShowEventModal(false);
     setNewEvent({
       title: '',
-      date: format(new Date(), 'yyyy-MM-dd'),
+      date: format(selectedDate, 'yyyy-MM-dd'),
       time: '09:00',
-      type: 'meeting'
+      type: 'meeting',
+      location: '',
+      participants: ''
     });
   };
 
@@ -102,6 +116,15 @@ const CalendarPage = () => {
     return tasks.filter(task => isSameDay(parseISO(task.dueDate), date));
   };
 
+  // Handle date selection
+  const handleDateClick = (day) => {
+    setSelectedDate(day);
+    setNewEvent(prev => ({
+      ...prev,
+      date: format(day, 'yyyy-MM-dd')
+    }));
+  };
+
   return (
     <div className="flex flex-col h-full bg-gray-50">
       {/* Calendar Header */}
@@ -112,7 +135,13 @@ const CalendarPage = () => {
         </div>
         <div className="flex items-center space-x-4">
           <button 
-            onClick={() => setShowEventModal(true)}
+            onClick={() => {
+              setShowEventModal(true);
+              setNewEvent(prev => ({
+                ...prev,
+                date: format(selectedDate, 'yyyy-MM-dd')
+              }));
+            }}
             className="flex items-center px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
           >
             <FiPlus className="mr-1" />
@@ -163,7 +192,7 @@ const CalendarPage = () => {
               return (
                 <div
                   key={i}
-                  onClick={() => setSelectedDate(day)}
+                  onClick={() => handleDateClick(day)}
                   className={`min-h-24 p-2 border rounded-lg cursor-pointer transition-colors ${
                     isSelected ? 'bg-blue-50 border-blue-300' : 'border-gray-200 hover:bg-gray-50'
                   } ${!isCurrentMonth ? 'opacity-50' : ''}`}
@@ -217,7 +246,13 @@ const CalendarPage = () => {
             <div className="flex items-center justify-between mb-2">
               <h4 className="font-medium text-gray-700">Events</h4>
               <button 
-                onClick={() => setShowEventModal(true)}
+                onClick={() => {
+                  setShowEventModal(true);
+                  setNewEvent(prev => ({
+                    ...prev,
+                    date: format(selectedDate, 'yyyy-MM-dd')
+                  }));
+                }}
                 className="text-xs text-blue-500 hover:text-blue-700"
               >
                 + Add Event
@@ -356,6 +391,25 @@ const CalendarPage = () => {
                   <option value="reminder">Reminder</option>
                   <option value="other">Other</option>
                 </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Location (optional)</label>
+                <input
+                  type="text"
+                  value={newEvent.location}
+                  onChange={(e) => setNewEvent({...newEvent, location: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Participants (comma separated, optional)</label>
+                <input
+                  type="text"
+                  value={newEvent.participants}
+                  onChange={(e) => setNewEvent({...newEvent, participants: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="John, Sarah, Mike"
+                />
               </div>
               <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
                 <button
