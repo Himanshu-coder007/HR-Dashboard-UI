@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FiFolder, FiPlus, FiEdit2 } from 'react-icons/fi';
+import { FiFolder, FiPlus } from 'react-icons/fi';
 import ProjectCard from '../components/projects/ProjectCard';
 import ProjectStats from '../components/projects/ProjectStats';
 import ProjectForm from '../components/projects/ProjectForm';
@@ -8,6 +8,7 @@ import TaskForm from '../components/projects/TaskForm';
 import ProjectSidebar from '../components/projects/ProjectSidebar';
 import CommentsSection from '../components/projects/CommentsSection';
 import AttachmentsSection from '../components/projects/AttachmentsSection';
+import ProjectSummary from '../components/projects/ProjectSummary';
 
 const Projects = () => {
   // State for projects and UI controls
@@ -250,6 +251,20 @@ const Projects = () => {
     });
   };
 
+  // Handle edit project click
+  const handleEditProject = () => {
+    setProjectForm({
+      name: selectedProject.name,
+      description: selectedProject.description,
+      startDate: selectedProject.startDate,
+      dueDate: selectedProject.dueDate,
+      status: selectedProject.status,
+      priority: selectedProject.priority,
+      teamMembers: selectedProject.teamMembers
+    });
+    setShowProjectForm(true);
+  };
+
   return (
     <div className="bg-white h-screen overflow-auto container mx-auto px-4 py-8">
       {!selectedProject ? (
@@ -326,49 +341,10 @@ const Projects = () => {
             ← Back to Projects
           </button>
           
-          <div className="flex justify-between items-start mb-6">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-800">{selectedProject.name}</h1>
-              <div className="flex items-center mt-2">
-                <span className={`px-2 py-1 text-xs rounded-full mr-3 ${
-                  selectedProject.status === 'completed' ? 'bg-green-100 text-green-800' :
-                  selectedProject.status === 'in progress' ? 'bg-blue-100 text-blue-800' :
-                  'bg-gray-100 text-gray-800'
-                }`}>
-                  {selectedProject.status}
-                </span>
-                <span className={`px-2 py-1 text-xs rounded-full ${
-                  selectedProject.priority === 'high' ? 'bg-red-100 text-red-800' :
-                  selectedProject.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                  'bg-green-100 text-green-800'
-                }`}>
-                  {selectedProject.priority} priority
-                </span>
-              </div>
-            </div>
-            
-            <div className="flex space-x-2">
-              <button 
-                onClick={() => {
-                  setProjectForm({
-                    name: selectedProject.name,
-                    description: selectedProject.description,
-                    startDate: selectedProject.startDate,
-                    dueDate: selectedProject.dueDate,
-                    status: selectedProject.status,
-                    priority: selectedProject.priority,
-                    teamMembers: selectedProject.teamMembers
-                  });
-                  setShowProjectForm(true);
-                }}
-                className="flex items-center bg-gray-200 px-3 py-1 rounded-lg hover:bg-gray-300 transition"
-              >
-                <FiEdit2 className="mr-1" /> Edit
-              </button>
-            </div>
-          </div>
-          
-          <p className="text-gray-700 mb-8">{selectedProject.description}</p>
+          <ProjectSummary 
+            project={selectedProject}
+            onEditClick={handleEditProject}
+          />
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
@@ -437,6 +413,5 @@ const Projects = () => {
     </div>
   );
 };
-
 
 export default Projects;
