@@ -1,18 +1,13 @@
 import { useState, useEffect } from 'react';
-import { FiFolder, FiUsers, FiClock, FiPlus, FiEdit2, FiTrash2, FiCheck, FiPaperclip, FiMessageSquare } from 'react-icons/fi';
-import { Doughnut, Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from 'chart.js';
-
-// Register ChartJS components
-ChartJS.register(
-  ArcElement,
-  Tooltip,
-  Legend,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title
-);
+import { FiFolder, FiPlus, FiEdit2 } from 'react-icons/fi';
+import ProjectCard from '../components/projects/ProjectCard';
+import ProjectStats from '../components/projects/ProjectStats';
+import ProjectForm from '../components/projects/ProjectForm';
+import TaskList from '../components/projects/TaskList';
+import TaskForm from '../components/projects/TaskForm';
+import ProjectSidebar from '../components/projects/ProjectSidebar';
+import CommentsSection from '../components/projects/CommentsSection';
+import AttachmentsSection from '../components/projects/AttachmentsSection';
 
 const Projects = () => {
   // State for projects and UI controls
@@ -23,7 +18,6 @@ const Projects = () => {
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [newComment, setNewComment] = useState('');
-  const [fileUpload, setFileUpload] = useState(null);
 
   // Form states
   const [projectForm, setProjectForm] = useState({
@@ -51,7 +45,7 @@ const Projects = () => {
     { id: 3, name: 'Mike Johnson', role: 'Manager' }
   ];
 
-  // Load sample data (in a real app, this would be an API call)
+  // Load sample data
   useEffect(() => {
     const sampleProjects = [
       {
@@ -117,110 +111,6 @@ const Projects = () => {
                           project.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && matchesSearch;
   });
-
-  // Calculate project progress based on tasks
-  const calculateProgress = (project) => {
-    if (!project.tasks || project.tasks.length === 0) return 0;
-    const completedTasks = project.tasks.filter(task => task.status === 'done').length;
-    return Math.round((completedTasks / project.tasks.length) * 100);
-  };
-
-  // Prepare data for the status chart
-  const getStatusData = () => {
-    const statusCounts = {
-      'not started': 0,
-      'in progress': 0,
-      'completed': 0
-    };
-
-    projects.forEach(project => {
-      statusCounts[project.status]++;
-    });
-
-    return {
-      labels: ['Not Started', 'In Progress', 'Completed'],
-      datasets: [
-        {
-          label: 'Projects by Status',
-          data: Object.values(statusCounts),
-          backgroundColor: [
-            'rgba(99, 102, 241, 0.7)',  // indigo-500
-            'rgba(59, 130, 246, 0.7)',  // blue-500
-            'rgba(16, 185, 129, 0.7)'  // green-500
-          ],
-          borderColor: [
-            'rgba(99, 102, 241, 1)',
-            'rgba(59, 130, 246, 1)',
-            'rgba(16, 185, 129, 1)'
-          ],
-          borderWidth: 1,
-        },
-      ],
-    };
-  };
-
-  // Prepare data for the priority chart
-  const getPriorityData = () => {
-    const priorityCounts = {
-      'low': 0,
-      'medium': 0,
-      'high': 0
-    };
-
-    projects.forEach(project => {
-      priorityCounts[project.priority]++;
-    });
-
-    return {
-      labels: ['Low', 'Medium', 'High'],
-      datasets: [
-        {
-          label: 'Projects by Priority',
-          data: Object.values(priorityCounts),
-          backgroundColor: [
-            'rgba(16, 185, 129, 0.7)',  // green-500
-            'rgba(234, 179, 8, 0.7)',   // yellow-500
-            'rgba(239, 68, 68, 0.7)'    // red-500
-          ],
-          borderColor: [
-            'rgba(16, 185, 129, 1)',
-            'rgba(234, 179, 8, 1)',
-            'rgba(239, 68, 68, 1)'
-          ],
-          borderWidth: 1,
-        },
-      ],
-    };
-  };
-
-  // Chart options
-  const chartOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'bottom',
-      },
-    },
-    maintainAspectRatio: false,
-  };
-
-  // Handle project form changes
-  const handleProjectFormChange = (e) => {
-    const { name, value } = e.target;
-    setProjectForm({
-      ...projectForm,
-      [name]: value
-    });
-  };
-
-  // Handle task form changes
-  const handleTaskFormChange = (e) => {
-    const { name, value } = e.target;
-    setTaskForm({
-      ...taskForm,
-      [name]: value
-    });
-  };
 
   // Submit new project
   const handleProjectSubmit = (e) => {
@@ -334,15 +224,12 @@ const Projects = () => {
   };
 
   // Handle file upload
-  const handleFileUpload = (e) => {
-    e.preventDefault();
-    if (!fileUpload) return;
-    
+  const handleFileUpload = (file) => {
     const attachment = {
       id: selectedProject.attachments.length + 1,
-      name: fileUpload.name,
-      type: fileUpload.type.split('/')[0],
-      url: URL.createObjectURL(fileUpload),
+      name: file.name,
+      type: file.type.split('/')[0],
+      url: URL.createObjectURL(file),
       uploadDate: new Date().toISOString().split('T')[0]
     };
     
@@ -361,7 +248,6 @@ const Projects = () => {
       ...selectedProject,
       attachments: [...selectedProject.attachments, attachment]
     });
-    setFileUpload(null);
   };
 
   return (
@@ -379,21 +265,7 @@ const Projects = () => {
             </button>
           </div>
 
-          {/* Project Stats and Charts */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div className="bg-white rounded-lg shadow-sm border p-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Projects by Status</h2>
-              <div className="h-64">
-                <Doughnut data={getStatusData()} options={chartOptions} />
-              </div>
-            </div>
-            <div className="bg-white rounded-lg shadow-sm border p-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Projects by Priority</h2>
-              <div className="h-64">
-                <Bar data={getPriorityData()} options={chartOptions} />
-              </div>
-            </div>
-          </div>
+          <ProjectStats projects={projects} />
 
           {/* Filters and Search */}
           <div className="flex flex-col md:flex-row justify-between mb-6 gap-4">
@@ -435,51 +307,12 @@ const Projects = () => {
           {/* Projects Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProjects.map(project => (
-              <div 
-                key={project.id} 
-                className="border rounded-lg p-6 hover:shadow-md transition cursor-pointer"
+              <ProjectCard 
+                key={project.id}
+                project={project}
+                teamMembers={teamMembers}
                 onClick={() => setSelectedProject(project)}
-              >
-                <div className="flex justify-between items-start mb-4">
-                  <h2 className="text-xl font-semibold text-gray-800">{project.name}</h2>
-                  <span className={`px-2 py-1 text-xs rounded-full ${
-                    project.status === 'completed' ? 'bg-green-100 text-green-800' :
-                    project.status === 'in progress' ? 'bg-blue-100 text-blue-800' :
-                    'bg-gray-100 text-gray-800'
-                  }`}>
-                    {project.status}
-                  </span>
-                </div>
-                
-                <p className="text-gray-600 mb-4 line-clamp-2">{project.description}</p>
-                
-                <div className="flex items-center text-gray-500 mb-4">
-                  <FiClock className="mr-2" />
-                  <span>Due: {new Date(project.dueDate).toLocaleDateString()}</span>
-                </div>
-                
-                <div className="flex items-center text-gray-500 mb-4">
-                  <FiUsers className="mr-2" />
-                  <span>
-                    Team: {project.teamMembers.length} member{project.teamMembers.length !== 1 ? 's' : ''}
-                  </span>
-                </div>
-                
-                {project.tasks && project.tasks.length > 0 && (
-                  <div className="mb-4">
-                    <div className="flex justify-between text-sm mb-1">
-                      <span>Progress</span>
-                      <span>{calculateProgress(project)}%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-blue-600 h-2 rounded-full" 
-                        style={{ width: `${calculateProgress(project)}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                )}
-              </div>
+              />
             ))}
           </div>
         </div>
@@ -539,213 +372,32 @@ const Projects = () => {
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
-              {/* Tasks Section */}
-              <div className="bg-white rounded-lg shadow-sm border p-6 mb-8">
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-xl font-semibold text-gray-800">Tasks</h2>
-                  <button 
-                    onClick={() => setShowTaskForm(true)}
-                    className="flex items-center bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 transition text-sm"
-                  >
-                    <FiPlus className="mr-1" /> Add Task
-                  </button>
-                </div>
-                
-                {selectedProject.tasks.length > 0 ? (
-                  <div className="space-y-4">
-                    {selectedProject.tasks.map(task => (
-                      <div key={task.id} className="border rounded-lg p-4">
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <h3 className="font-medium text-gray-800">{task.title}</h3>
-                            {task.description && (
-                              <p className="text-gray-600 text-sm mt-1">{task.description}</p>
-                            )}
-                          </div>
-                          <select
-                            value={task.status}
-                            onChange={(e) => updateTaskStatus(task.id, e.target.value)}
-                            className={`text-xs px-2 py-1 rounded ${
-                              task.status === 'done' ? 'bg-green-100 text-green-800' :
-                              task.status === 'in progress' ? 'bg-blue-100 text-blue-800' :
-                              'bg-gray-100 text-gray-800'
-                            }`}
-                          >
-                            <option value="todo">To Do</option>
-                            <option value="in progress">In Progress</option>
-                            <option value="done">Done</option>
-                          </select>
-                        </div>
-                        
-                        <div className="flex justify-between items-center mt-3 text-xs text-gray-500">
-                          <div>
-                            {task.assignee && (
-                              <span>
-                                Assigned to: {teamMembers.find(m => m.id === task.assignee)?.name || 'Unassigned'}
-                              </span>
-                            )}
-                          </div>
-                          <div>
-                            {task.dueDate && (
-                              <span>Due: {new Date(task.dueDate).toLocaleDateString()}</span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-gray-500 text-center py-4">No tasks yet. Add your first task!</p>
-                )}
-              </div>
+              <TaskList 
+                tasks={selectedProject.tasks}
+                teamMembers={teamMembers}
+                onStatusChange={updateTaskStatus}
+                onAddTask={() => setShowTaskForm(true)}
+              />
               
-              {/* Comments Section */}
-              <div className="bg-white rounded-lg shadow-sm border p-6">
-                <h2 className="text-xl font-semibold text-gray-800 mb-6">Discussion</h2>
-                
-                <div className="space-y-4 mb-6">
-                  {selectedProject.comments.length > 0 ? (
-                    selectedProject.comments.map(comment => (
-                      <div key={comment.id} className="border-b pb-4">
-                        <div className="flex justify-between items-center mb-2">
-                          <span className="font-medium text-gray-800">
-                            {teamMembers.find(m => m.id === comment.author)?.name || 'Unknown'}
-                          </span>
-                          <span className="text-xs text-gray-500">{comment.date}</span>
-                        </div>
-                        <p className="text-gray-700">{comment.text}</p>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-gray-500 text-center py-4">No comments yet. Start the discussion!</p>
-                  )}
-                </div>
-                
-                <div className="flex space-x-2">
-                  <input
-                    type="text"
-                    placeholder="Add a comment..."
-                    className="flex-1 border rounded-lg px-4 py-2"
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                  />
-                  <button
-                    onClick={addComment}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-                  >
-                    <FiMessageSquare />
-                  </button>
-                </div>
-              </div>
+              <CommentsSection 
+                comments={selectedProject.comments}
+                teamMembers={teamMembers}
+                newComment={newComment}
+                onCommentChange={setNewComment}
+                onAddComment={addComment}
+              />
             </div>
             
             <div>
-              {/* Project Info Sidebar */}
-              <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
-                <h2 className="text-xl font-semibold text-gray-800 mb-4">Project Details</h2>
-                
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-500">Start Date</h3>
-                    <p>{new Date(selectedProject.startDate).toLocaleDateString()}</p>
-                  </div>
-                  
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-500">Due Date</h3>
-                    <p>{new Date(selectedProject.dueDate).toLocaleDateString()}</p>
-                  </div>
-                  
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-500">Team Members</h3>
-                    <div className="mt-2 space-y-2">
-                      {selectedProject.teamMembers.length > 0 ? (
-                        selectedProject.teamMembers.map(memberId => {
-                          const member = teamMembers.find(m => m.id === memberId);
-                          return member ? (
-                            <div key={member.id} className="flex items-center">
-                              <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center mr-2">
-                                {member.name.charAt(0)}
-                              </div>
-                              <div>
-                                <p className="text-sm font-medium">{member.name}</p>
-                                <p className="text-xs text-gray-500">{member.role}</p>
-                              </div>
-                            </div>
-                          ) : null;
-                        })
-                      ) : (
-                        <p className="text-sm text-gray-500">No team members assigned</p>
-                      )}
-                    </div>
-                  </div>
-                  
-                  {selectedProject.tasks.length > 0 && (
-                    <div>
-                      <h3 className="text-sm font-medium text-gray-500">Progress</h3>
-                      <div className="mt-2">
-                        <div className="flex justify-between text-sm mb-1">
-                          <span>{calculateProgress(selectedProject)}% complete</span>
-                          <span>
-                            {selectedProject.tasks.filter(t => t.status === 'done').length}/
-                            {selectedProject.tasks.length} tasks
-                          </span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div 
-                            className="bg-blue-600 h-2 rounded-full" 
-                            style={{ width: `${calculateProgress(selectedProject)}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
+              <ProjectSidebar 
+                project={selectedProject}
+                teamMembers={teamMembers}
+              />
               
-              {/* Attachments Section */}
-              <div className="bg-white rounded-lg shadow-sm border p-6">
-                <h2 className="text-xl font-semibold text-gray-800 mb-4">Attachments</h2>
-                
-                {selectedProject.attachments.length > 0 ? (
-                  <div className="space-y-3">
-                    {selectedProject.attachments.map(file => (
-                      <div key={file.id} className="flex items-center p-2 border rounded-lg hover:bg-gray-50">
-                        <FiPaperclip className="mr-3 text-gray-500" />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium truncate">{file.name}</p>
-                          <p className="text-xs text-gray-500">{file.uploadDate}</p>
-                        </div>
-                        <a 
-                          href={file.url} 
-                          download
-                          className="text-blue-600 text-sm hover:underline"
-                        >
-                          Download
-                        </a>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-gray-500 text-center py-4">No attachments yet</p>
-                )}
-                
-                <form onSubmit={handleFileUpload} className="mt-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Upload File</label>
-                  <div className="flex">
-                    <input
-                      type="file"
-                      onChange={(e) => setFileUpload(e.target.files[0])}
-                      className="flex-1 border rounded-l-lg px-3 py-2 text-sm"
-                    />
-                    <button
-                      type="submit"
-                      className="bg-blue-600 text-white px-3 py-2 rounded-r-lg hover:bg-blue-700 transition"
-                    >
-                      <FiPaperclip />
-                    </button>
-                  </div>
-                </form>
-              </div>
+              <AttachmentsSection 
+                attachments={selectedProject.attachments}
+                onFileUpload={handleFileUpload}
+              />
             </div>
           </div>
         </div>
@@ -755,136 +407,13 @@ const Projects = () => {
       {showProjectForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md">
-            <div className="p-6">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                {projectForm.id ? 'Edit Project' : 'New Project'}
-              </h2>
-              
-              <form onSubmit={handleProjectSubmit}>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Project Name</label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={projectForm.name}
-                      onChange={handleProjectFormChange}
-                      className="w-full border rounded-lg px-4 py-2"
-                      required
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <textarea
-                      name="description"
-                      value={projectForm.description}
-                      onChange={handleProjectFormChange}
-                      className="w-full border rounded-lg px-4 py-2"
-                      rows="3"
-                    />
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
-                      <input
-                        type="date"
-                        name="startDate"
-                        value={projectForm.startDate}
-                        onChange={handleProjectFormChange}
-                        className="w-full border rounded-lg px-4 py-2"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
-                      <input
-                        type="date"
-                        name="dueDate"
-                        value={projectForm.dueDate}
-                        onChange={handleProjectFormChange}
-                        className="w-full border rounded-lg px-4 py-2"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                      <select
-                        name="status"
-                        value={projectForm.status}
-                        onChange={handleProjectFormChange}
-                        className="w-full border rounded-lg px-4 py-2"
-                      >
-                        <option value="not started">Not Started</option>
-                        <option value="in progress">In Progress</option>
-                        <option value="completed">Completed</option>
-                      </select>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
-                      <select
-                        name="priority"
-                        value={projectForm.priority}
-                        onChange={handleProjectFormChange}
-                        className="w-full border rounded-lg px-4 py-2"
-                      >
-                        <option value="low">Low</option>
-                        <option value="medium">Medium</option>
-                        <option value="high">High</option>
-                      </select>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Team Members</label>
-                    <div className="space-y-2">
-                      {teamMembers.map(member => (
-                        <div key={member.id} className="flex items-center">
-                          <input
-                            type="checkbox"
-                            id={`member-${member.id}`}
-                            checked={projectForm.teamMembers.includes(member.id)}
-                            onChange={() => {
-                              const updatedMembers = projectForm.teamMembers.includes(member.id)
-                                ? projectForm.teamMembers.filter(id => id !== member.id)
-                                : [...projectForm.teamMembers, member.id];
-                              setProjectForm({
-                                ...projectForm,
-                                teamMembers: updatedMembers
-                              });
-                            }}
-                            className="mr-2"
-                          />
-                          <label htmlFor={`member-${member.id}`} className="text-sm">
-                            {member.name} ({member.role})
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="flex justify-end space-x-3 mt-6">
-                  <button
-                    type="button"
-                    onClick={() => setShowProjectForm(false)}
-                    className="px-4 py-2 border rounded-lg hover:bg-gray-100"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                  >
-                    {projectForm.id ? 'Update' : 'Create'} Project
-                  </button>
-                </div>
-              </form>
-            </div>
+            <ProjectForm 
+              projectForm={projectForm}
+              teamMembers={teamMembers}
+              onSubmit={handleProjectSubmit}
+              onCancel={() => setShowProjectForm(false)}
+              onChange={setProjectForm}
+            />
           </div>
         </div>
       )}
@@ -893,104 +422,21 @@ const Projects = () => {
       {showTaskForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md">
-            <div className="p-6">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">Add New Task</h2>
-              
-              <form onSubmit={handleTaskSubmit}>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Task Title</label>
-                    <input
-                      type="text"
-                      name="title"
-                      value={taskForm.title}
-                      onChange={handleTaskFormChange}
-                      className="w-full border rounded-lg px-4 py-2"
-                      required
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <textarea
-                      name="description"
-                      value={taskForm.description}
-                      onChange={handleTaskFormChange}
-                      className="w-full border rounded-lg px-4 py-2"
-                      rows="3"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Assignee</label>
-                    <select
-                      name="assignee"
-                      value={taskForm.assignee}
-                      onChange={handleTaskFormChange}
-                      className="w-full border rounded-lg px-4 py-2"
-                    >
-                      <option value="">Select team member</option>
-                      {selectedProject.teamMembers.map(memberId => {
-                        const member = teamMembers.find(m => m.id === memberId);
-                        return member ? (
-                          <option key={member.id} value={member.id}>
-                            {member.name} ({member.role})
-                          </option>
-                        ) : null;
-                      })}
-                    </select>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                      <select
-                        name="status"
-                        value={taskForm.status}
-                        onChange={handleTaskFormChange}
-                        className="w-full border rounded-lg px-4 py-2"
-                      >
-                        <option value="todo">To Do</option>
-                        <option value="in progress">In Progress</option>
-                        <option value="done">Done</option>
-                      </select>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
-                      <input
-                        type="date"
-                        name="dueDate"
-                        value={taskForm.dueDate}
-                        onChange={handleTaskFormChange}
-                        className="w-full border rounded-lg px-4 py-2"
-                      />
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="flex justify-end space-x-3 mt-6">
-                  <button
-                    type="button"
-                    onClick={() => setShowTaskForm(false)}
-                    className="px-4 py-2 border rounded-lg hover:bg-gray-100"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                  >
-                    Add Task
-                  </button>
-                </div>
-              </form>
-            </div>
+            <TaskForm 
+              taskForm={taskForm}
+              teamMembers={teamMembers.filter(m => 
+                selectedProject.teamMembers.includes(m.id))
+              }
+              onSubmit={handleTaskSubmit}
+              onCancel={() => setShowTaskForm(false)}
+              onChange={setTaskForm}
+            />
           </div>
         </div>
       )}
     </div>
   );
 };
+
 
 export default Projects;
