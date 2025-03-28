@@ -19,7 +19,7 @@ const Hiring = () => {
     { id: 'interviewScheduling', label: 'Interview Scheduling', icon: <FiCalendar className="mr-2" /> },
     { id: 'candidateEvaluation', label: 'Candidate Evaluation', icon: <FiClipboard className="mr-2" /> },
     { id: 'offerManagement', label: 'Offer Management', icon: <FiDollarSign className="mr-2" /> },
-    { id: 'reportsAnalytics', label: 'Reports & Analytics', icon: <FiBarChart2 className="mr-2" /> },
+    
   ];
 
   const renderActiveTab = () => {

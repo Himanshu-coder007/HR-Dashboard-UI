@@ -67,7 +67,24 @@ const JobListings = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // In a real app, you would update the state or make an API call here
+    const formData = new FormData(e.target);
+    const jobData = Object.fromEntries(formData.entries());
+    
+    if (currentJob) {
+      // Update existing job
+      setJobs(jobs.map(job => 
+        job.id === currentJob.id ? { ...job, ...jobData } : job
+      ));
+    } else {
+      // Create new job
+      const newJob = {
+        ...jobData,
+        id: Math.max(...jobs.map(job => job.id), 0) + 1,
+        applications: 0
+      };
+      setJobs([...jobs, newJob]);
+    }
+    
     setIsModalOpen(false);
     setCurrentJob(null);
   };
@@ -86,9 +103,9 @@ const JobListings = () => {
   };
 
   return (
-    <div>
+    <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-gray-900">Job Listings</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Job Listings</h2>
         <button
           onClick={() => { setCurrentJob(null); setIsModalOpen(true); }}
           className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
@@ -97,7 +114,7 @@ const JobListings = () => {
         </button>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto bg-white rounded-lg shadow">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -113,7 +130,7 @@ const JobListings = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {jobs.map((job) => (
-              <tr key={job.id}>
+              <tr key={job.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{job.title}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{job.department}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{job.location}</td>
@@ -121,11 +138,19 @@ const JobListings = () => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{getStatusBadge(job.status)}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{job.applications}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{job.deadline}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <button onClick={() => handleEdit(job)} className="text-blue-600 hover:text-blue-900 mr-3">
+                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                  <button 
+                    onClick={() => handleEdit(job)} 
+                    className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50"
+                    title="Edit"
+                  >
                     <FiEdit2 />
                   </button>
-                  <button onClick={() => handleDeleteClick(job)} className="text-red-600 hover:text-red-900">
+                  <button 
+                    onClick={() => handleDeleteClick(job)} 
+                    className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50"
+                    title="Delete"
+                  >
                     <FiTrash2 />
                   </button>
                 </td>
@@ -152,107 +177,116 @@ const JobListings = () => {
                   <form onSubmit={handleSubmit} className="mt-5 space-y-6">
                     <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                       <div className="sm:col-span-6">
-                        <label htmlFor="title" className="block text-sm font-medium text-gray-700">Job Title</label>
+                        <label htmlFor="title" className="block text-sm font-medium text-gray-700">Job Title*</label>
                         <input
                           type="text"
                           name="title"
                           id="title"
                           defaultValue={currentJob?.title || ''}
+                          required
                           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         />
                       </div>
 
                       <div className="sm:col-span-3">
-                        <label htmlFor="department" className="block text-sm font-medium text-gray-700">Department</label>
+                        <label htmlFor="department" className="block text-sm font-medium text-gray-700">Department*</label>
                         <input
                           type="text"
                           name="department"
                           id="department"
                           defaultValue={currentJob?.department || ''}
+                          required
                           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         />
                       </div>
 
                       <div className="sm:col-span-3">
-                        <label htmlFor="location" className="block text-sm font-medium text-gray-700">Location</label>
+                        <label htmlFor="location" className="block text-sm font-medium text-gray-700">Location*</label>
                         <input
                           type="text"
                           name="location"
                           id="location"
                           defaultValue={currentJob?.location || ''}
+                          required
                           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         />
                       </div>
 
                       <div className="sm:col-span-3">
-                        <label htmlFor="type" className="block text-sm font-medium text-gray-700">Employment Type</label>
+                        <label htmlFor="type" className="block text-sm font-medium text-gray-700">Employment Type*</label>
                         <select
                           id="type"
                           name="type"
-                          defaultValue={currentJob?.type || ''}
+                          defaultValue={currentJob?.type || 'Full-time'}
+                          required
                           className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
                         >
-                          <option>Full-time</option>
-                          <option>Part-time</option>
-                          <option>Contract</option>
-                          <option>Internship</option>
+                          <option value="Full-time">Full-time</option>
+                          <option value="Part-time">Part-time</option>
+                          <option value="Contract">Contract</option>
+                          <option value="Internship">Internship</option>
                         </select>
                       </div>
 
                       <div className="sm:col-span-3">
-                        <label htmlFor="status" className="block text-sm font-medium text-gray-700">Status</label>
+                        <label htmlFor="status" className="block text-sm font-medium text-gray-700">Status*</label>
                         <select
                           id="status"
                           name="status"
                           defaultValue={currentJob?.status || 'Open'}
+                          required
                           className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
                         >
-                          <option>Open</option>
-                          <option>In Progress</option>
-                          <option>Closed</option>
+                          <option value="Open">Open</option>
+                          <option value="In Progress">In Progress</option>
+                          <option value="Closed">Closed</option>
                         </select>
                       </div>
 
                       <div className="sm:col-span-6">
-                        <label htmlFor="description" className="block text-sm font-medium text-gray-700">Job Description</label>
+                        <label htmlFor="description" className="block text-sm font-medium text-gray-700">Job Description*</label>
                         <textarea
                           id="description"
                           name="description"
                           rows={3}
                           defaultValue={currentJob?.description || ''}
+                          required
                           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         />
                       </div>
 
                       <div className="sm:col-span-6">
-                        <label htmlFor="requirements" className="block text-sm font-medium text-gray-700">Requirements</label>
+                        <label htmlFor="requirements" className="block text-sm font-medium text-gray-700">Requirements*</label>
                         <textarea
                           id="requirements"
                           name="requirements"
                           rows={3}
                           defaultValue={currentJob?.requirements || ''}
+                          required
                           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         />
                       </div>
 
                       <div className="sm:col-span-3">
-                        <label htmlFor="posted" className="block text-sm font-medium text-gray-700">Posted Date</label>
+                        <label htmlFor="posted" className="block text-sm font-medium text-gray-700">Posted Date*</label>
                         <input
                           type="date"
                           name="posted"
                           id="posted"
                           defaultValue={currentJob?.posted || ''}
+                          required
                           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         />
                       </div>
 
                       <div className="sm:col-span-3">
-                        <label htmlFor="deadline" className="block text-sm font-medium text-gray-700">Application Deadline</label>
+                        <label htmlFor="deadline" className="block text-sm font-medium text-gray-700">Application Deadline*</label>
                         <input
                           type="date"
                           name="deadline"
                           id="deadline"
                           defaultValue={currentJob?.deadline || ''}
+                          required
                           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         />
                       </div>
