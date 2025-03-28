@@ -126,10 +126,13 @@ const Sidebar = () => {
               </Link>
             </li>
             <li>
-              <button className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors">
+              <Link 
+                to="/payroll" 
+                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
                 <FiDollarSign className="text-lg" />
                 <span className="ml-3">Payroll</span>
-              </button>
+              </Link>
             </li>
             <li>
               <button className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors">

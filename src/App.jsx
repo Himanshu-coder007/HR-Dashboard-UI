@@ -7,6 +7,7 @@ import Calender from './pages/Calender';
 import Employees from './pages/Employees';
 import Attendance from './pages/Attendance';
 import Project from './pages/Project';
+import Payroll from './pages/Payroll';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="employees" element={<Employees />} />
           <Route path="attendance" element={<Attendance />} />
           <Route path="projects" element={<Project />} />
+          <Route path="payroll" element={<Payroll />} />
         </Route>
       </Routes>
     </Router>
