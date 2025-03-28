@@ -8,6 +8,7 @@ import Employees from './pages/Employees';
 import Attendance from './pages/Attendance';
 import Project from './pages/Project';
 import Payroll from './pages/Payroll';
+import Hiring from './pages/Hiring';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="attendance" element={<Attendance />} />
           <Route path="projects" element={<Project />} />
           <Route path="payroll" element={<Payroll />} />
+          <Route path="hiring" element={<Hiring />} />
         </Route>
       </Routes>
     </Router>

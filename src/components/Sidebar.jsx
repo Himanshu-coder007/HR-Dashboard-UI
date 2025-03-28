@@ -135,10 +135,13 @@ const Sidebar = () => {
               </Link>
             </li>
             <li>
-              <button className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors">
+              <Link 
+                to="/hiring" 
+                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
                 <FiUserPlus className="text-lg" />
                 <span className="ml-3">Hiring</span>
-              </button>
+              </Link>
             </li>
           </ul>
         </div>
