@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  FiPlus, 
-  FiFilter, 
-  FiList, 
-  FiGrid, 
-  FiTable, 
+import React, { useState, useEffect } from "react";
+import {
+  FiPlus,
+  FiFilter,
+  FiList,
+  FiGrid,
+  FiTable,
   FiAlignLeft,
   FiSearch,
   FiCalendar,
@@ -13,70 +13,77 @@ import {
   FiEdit2,
   FiTrash2,
   FiUser,
-  FiCheck
-} from 'react-icons/fi';
+  FiCheck,
+} from "react-icons/fi";
 
 const Task = () => {
   // Load tasks from localStorage on initial render
   const [tasks, setTasks] = useState(() => {
-    const savedTasks = localStorage.getItem('tasks');
-    return savedTasks ? JSON.parse(savedTasks) : [
-      {
-        id: 1,
-        category: "Recruitment",
-        title: "Employee Onboarding Approval",
-        description: "A new onboarding request has been submitted for Jane Smith (Marketing Department). HR needs to verify the required documents, approve the onboarding process, and schedule an introduction meeting with the team.",
-        status: "New Request",
-        count: 3,
-        dateCreated: "2025-03-01",
-        tags: ["Compliance"],
-        assignedTo: []
-      },
-      {
-        id: 2,
-        category: "Finance",
-        title: "Payroll Processing",
-        description: "HR and the finance team are calculating salaries, bonuses, tax deductions, and overtime pay. Any discrepancies need to be resolved before the final payroll submission on March 10.",
-        status: "In Progress",
-        count: 6,
-        dateCreated: "2025-02-28",
-        tags: ["Compensation"],
-        assignedTo: []
-      },
-      {
-        id: 3,
-        category: "Feedback",
-        title: "Employee Satisfaction Survey",
-        description: "The HR team has gathered feedback from all departments and is now analyzing the results to identify key areas for improvement.",
-        status: "Complete",
-        count: 12,
-        dateCreated: "2025-03-02",
-        tags: ["Engagement"],
-        assignedTo: []
-      },
-      {
-        id: 4,
-        category: "Training",
-        title: "Leadership Workshop",
-        description: "Organize a leadership development workshop for middle management scheduled for next month.",
-        status: "In Progress",
-        count: 2,
-        dateCreated: "2025-02-25",
-        tags: ["Development"],
-        assignedTo: []
-      },
-      {
-        id: 5,
-        category: "Compliance",
-        title: "Policy Update Review",
-        description: "Review and update company policies to ensure compliance with new labor regulations.",
-        status: "New Request",
-        count: 5,
-        dateCreated: "2025-03-03",
-        tags: ["Legal"],
-        assignedTo: []
-      }
-    ];
+    const savedTasks = localStorage.getItem("tasks");
+    return savedTasks
+      ? JSON.parse(savedTasks)
+      : [
+          {
+            id: 1,
+            category: "Recruitment",
+            title: "Employee Onboarding Approval",
+            description:
+              "A new onboarding request has been submitted for Jane Smith (Marketing Department). HR needs to verify the required documents, approve the onboarding process, and schedule an introduction meeting with the team.",
+            status: "New Request",
+            count: 3,
+            dateCreated: "2025-03-01",
+            tags: ["Compliance"],
+            assignedTo: [],
+          },
+          {
+            id: 2,
+            category: "Finance",
+            title: "Payroll Processing",
+            description:
+              "HR and the finance team are calculating salaries, bonuses, tax deductions, and overtime pay. Any discrepancies need to be resolved before the final payroll submission on March 10.",
+            status: "In Progress",
+            count: 6,
+            dateCreated: "2025-02-28",
+            tags: ["Compensation"],
+            assignedTo: [],
+          },
+          {
+            id: 3,
+            category: "Feedback",
+            title: "Employee Satisfaction Survey",
+            description:
+              "The HR team has gathered feedback from all departments and is now analyzing the results to identify key areas for improvement.",
+            status: "Complete",
+            count: 12,
+            dateCreated: "2025-03-02",
+            tags: ["Engagement"],
+            assignedTo: [],
+          },
+          {
+            id: 4,
+            category: "Training",
+            title: "Leadership Workshop",
+            description:
+              "Organize a leadership development workshop for middle management scheduled for next month.",
+            status: "In Progress",
+            count: 2,
+            dateCreated: "2025-02-25",
+            tags: ["Development"],
+            assignedTo: [],
+          },
+          {
+            id: 5,
+            category: "Compliance",
+            title: "Policy Update Review",
+            description:
+              "Review and update company policies to ensure compliance with new labor regulations.",
+            status: "New Request",
+            count: 5,
+            dateCreated: "2025-03-03",
+            tags: ["Legal"],
+            assignedTo: [],
+          },
+        ];
   });
 
   // Employee data with roles
@@ -86,58 +93,58 @@ const Task = () => {
       username: "john_doe",
       email: "john.doe@example.com",
       roles: ["developer"],
-      roleDisplay: "Developer"
+      roleDisplay: "Developer",
     },
     {
       id: 2,
       username: "jane_smith",
       email: "jane.smith@example.com",
       roles: ["designer"],
-      roleDisplay: "Designer"
+      roleDisplay: "Designer",
     },
     {
       id: 3,
       username: "alice_jones",
       email: "alice.jones@example.com",
       roles: ["project manager"],
-      roleDisplay: "Project Manager"
+      roleDisplay: "Project Manager",
     },
     {
       id: 4,
       username: "bob_williams",
       email: "bob.williams@example.com",
       roles: ["business analyst"],
-      roleDisplay: "Business Analyst"
+      roleDisplay: "Business Analyst",
     },
     {
       id: 5,
       username: "charlie_brown",
       email: "charlie.brown@example.com",
       roles: ["developer", "designer"],
-      roleDisplay: "Developer/Designer"
-    }
+      roleDisplay: "Developer/Designer",
+    },
   ]);
 
   // Other state declarations
-  const [viewType, setViewType] = useState('kanban');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortOrder, setSortOrder] = useState('newest');
+  const [viewType, setViewType] = useState("kanban");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState("newest");
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [showNewTaskModal, setShowNewTaskModal] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
   const [assigningTask, setAssigningTask] = useState(null);
   const [newTask, setNewTask] = useState({
-    title: '',
-    description: '',
-    category: 'Recruitment',
-    status: 'New Request',
+    title: "",
+    description: "",
+    category: "Recruitment",
+    status: "New Request",
     tags: [],
-    assignedTo: []
+    assignedTo: [],
   });
 
   // Save tasks to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+    localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
   // Close dropdown when clicking outside
@@ -147,29 +154,32 @@ const Task = () => {
         setShowSortDropdown(false);
       }
     };
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, [showSortDropdown]);
 
   // Filter tasks based on search term
-  const filteredTasks = tasks.filter(task =>
-    task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    task.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    task.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+  const filteredTasks = tasks.filter(
+    (task) =>
+      task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      task.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      task.tags.some((tag) =>
+        tag.toLowerCase().includes(searchTerm.toLowerCase())
+      )
   );
 
   // Sort tasks by date
   const sortedTasks = [...filteredTasks].sort((a, b) => {
     const dateA = new Date(a.dateCreated);
     const dateB = new Date(b.dateCreated);
-    return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+    return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
   });
 
   // Kanban view columns
   const statusColumns = [
-    { id: 'new', title: 'New Request', color: 'blue' },
-    { id: 'progress', title: 'In Progress', color: 'yellow' },
-    { id: 'complete', title: 'Complete', color: 'green' }
+    { id: "new", title: "New Request", color: "blue" },
+    { id: "progress", title: "In Progress", color: "yellow" },
+    { id: "complete", title: "Complete", color: "green" },
   ];
 
   // Toggle sort dropdown
@@ -181,45 +191,45 @@ const Task = () => {
   // Handle new task input changes
   const handleNewTaskChange = (e) => {
     const { name, value } = e.target;
-    setNewTask(prev => ({
+    setNewTask((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   // Handle tag addition
   const handleAddTag = (e) => {
-    if (e.key === 'Enter' && e.target.value.trim()) {
-      const updatedTags = editingTask 
+    if (e.key === "Enter" && e.target.value.trim()) {
+      const updatedTags = editingTask
         ? [...editingTask.tags, e.target.value.trim()]
         : [...newTask.tags, e.target.value.trim()];
-      
+
       if (editingTask) {
-        setEditingTask(prev => ({
+        setEditingTask((prev) => ({
           ...prev,
-          tags: updatedTags
+          tags: updatedTags,
         }));
       } else {
-        setNewTask(prev => ({
+        setNewTask((prev) => ({
           ...prev,
-          tags: updatedTags
+          tags: updatedTags,
         }));
       }
-      e.target.value = '';
+      e.target.value = "";
     }
   };
 
   // Handle tag removal
   const handleRemoveTag = (index, isEditing) => {
     if (isEditing) {
-      setEditingTask(prev => ({
+      setEditingTask((prev) => ({
         ...prev,
-        tags: prev.tags.filter((_, i) => i !== index)
+        tags: prev.tags.filter((_, i) => i !== index),
       }));
     } else {
-      setNewTask(prev => ({
+      setNewTask((prev) => ({
         ...prev,
-        tags: prev.tags.filter((_, i) => i !== index)
+        tags: prev.tags.filter((_, i) => i !== index),
       }));
     }
   };
@@ -231,18 +241,18 @@ const Task = () => {
       ...newTask,
       id: Date.now(),
       count: 1,
-      dateCreated: new Date().toISOString().split('T')[0],
-      assignedTo: []
+      dateCreated: new Date().toISOString().split("T")[0],
+      assignedTo: [],
     };
     setTasks([...tasks, newTaskObj]);
     setShowNewTaskModal(false);
     setNewTask({
-      title: '',
-      description: '',
-      category: 'Recruitment',
-      status: 'New Request',
+      title: "",
+      description: "",
+      category: "Recruitment",
+      status: "New Request",
       tags: [],
-      assignedTo: []
+      assignedTo: [],
     });
   };
 
@@ -250,7 +260,7 @@ const Task = () => {
   const handleEditTask = (task) => {
     setEditingTask({
       ...task,
-      assignedTo: task.assignedTo || []
+      assignedTo: task.assignedTo || [],
     });
     setShowNewTaskModal(true);
   };
@@ -258,7 +268,7 @@ const Task = () => {
   // Submit edited task
   const handleSubmitEditTask = (e) => {
     e.preventDefault();
-    const updatedTasks = tasks.map(task => 
+    const updatedTasks = tasks.map((task) =>
       task.id === editingTask.id ? editingTask : task
     );
     setTasks(updatedTasks);
@@ -268,23 +278,25 @@ const Task = () => {
 
   // Handle delete task
   const handleDeleteTask = (id) => {
-    if (window.confirm('Are you sure you want to delete this task?')) {
-      setTasks(tasks.filter(task => task.id !== id));
+    if (window.confirm("Are you sure you want to delete this task?")) {
+      setTasks(tasks.filter((task) => task.id !== id));
     }
   };
 
   // Handle status change
   const handleStatusChange = (taskId, newStatus) => {
-    setTasks(tasks.map(task => 
-      task.id === taskId ? { ...task, status: newStatus } : task
-    ));
+    setTasks(
+      tasks.map((task) =>
+        task.id === taskId ? { ...task, status: newStatus } : task
+      )
+    );
   };
 
   // Handle assign task
   const handleAssignTask = (task) => {
     setAssigningTask({
       ...task,
-      assignedTo: task.assignedTo || []
+      assignedTo: task.assignedTo || [],
     });
   };
 
@@ -294,12 +306,12 @@ const Task = () => {
 
     const currentAssignees = assigningTask.assignedTo || [];
     const updatedAssignees = currentAssignees.includes(employeeId)
-      ? currentAssignees.filter(id => id !== employeeId)
+      ? currentAssignees.filter((id) => id !== employeeId)
       : [...currentAssignees, employeeId];
 
     setAssigningTask({
       ...assigningTask,
-      assignedTo: updatedAssignees
+      assignedTo: updatedAssignees,
     });
   };
 
@@ -307,9 +319,9 @@ const Task = () => {
   const saveAssignees = () => {
     if (!assigningTask) return;
 
-    setTasks(tasks.map(task => 
-      task.id === assigningTask.id ? assigningTask : task
-    ));
+    setTasks(
+      tasks.map((task) => (task.id === assigningTask.id ? assigningTask : task))
+    );
     setAssigningTask(null);
   };
 
@@ -321,9 +333,9 @@ const Task = () => {
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
             <div className="flex justify-between items-center border-b border-gray-200 p-4">
               <h3 className="text-lg font-semibold">
-                {editingTask ? 'Edit Task' : 'Create New Task'}
+                {editingTask ? "Edit Task" : "Create New Task"}
               </h3>
-              <button 
+              <button
                 onClick={() => {
                   setShowNewTaskModal(false);
                   setEditingTask(null);
@@ -333,19 +345,26 @@ const Task = () => {
                 <FiX size={20} />
               </button>
             </div>
-            <form 
-              onSubmit={editingTask ? handleSubmitEditTask : handleSubmitNewTask} 
+            <form
+              onSubmit={
+                editingTask ? handleSubmitEditTask : handleSubmitNewTask
+              }
               className="p-4 space-y-4"
             >
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Title
+                </label>
                 <input
                   type="text"
                   name="title"
                   value={editingTask ? editingTask.title : newTask.title}
-                  onChange={(e) => 
+                  onChange={(e) =>
                     editingTask
-                      ? setEditingTask({...editingTask, title: e.target.value})
+                      ? setEditingTask({
+                          ...editingTask,
+                          title: e.target.value,
+                        })
                       : handleNewTaskChange(e)
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -353,13 +372,20 @@ const Task = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Description
+                </label>
                 <textarea
                   name="description"
-                  value={editingTask ? editingTask.description : newTask.description}
-                  onChange={(e) => 
+                  value={
+                    editingTask ? editingTask.description : newTask.description
+                  }
+                  onChange={(e) =>
                     editingTask
-                      ? setEditingTask({...editingTask, description: e.target.value})
+                      ? setEditingTask({
+                          ...editingTask,
+                          description: e.target.value,
+                        })
                       : handleNewTaskChange(e)
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -368,13 +394,20 @@ const Task = () => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Category
+                  </label>
                   <select
                     name="category"
-                    value={editingTask ? editingTask.category : newTask.category}
-                    onChange={(e) => 
+                    value={
+                      editingTask ? editingTask.category : newTask.category
+                    }
+                    onChange={(e) =>
                       editingTask
-                        ? setEditingTask({...editingTask, category: e.target.value})
+                        ? setEditingTask({
+                            ...editingTask,
+                            category: e.target.value,
+                          })
                         : handleNewTaskChange(e)
                     }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -387,13 +420,18 @@ const Task = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Status
+                  </label>
                   <select
                     name="status"
                     value={editingTask ? editingTask.status : newTask.status}
-                    onChange={(e) => 
+                    onChange={(e) =>
                       editingTask
-                        ? setEditingTask({...editingTask, status: e.target.value})
+                        ? setEditingTask({
+                            ...editingTask,
+                            status: e.target.value,
+                          })
                         : handleNewTaskChange(e)
                     }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -405,20 +443,27 @@ const Task = () => {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Tags</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Tags
+                </label>
                 <div className="flex flex-wrap gap-2 mb-2">
-                  {(editingTask ? editingTask.tags : newTask.tags).map((tag, index) => (
-                    <span key={index} className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
-                      {tag}
-                      <button 
-                        type="button"
-                        onClick={() => handleRemoveTag(index, !!editingTask)}
-                        className="ml-1 text-blue-600 hover:text-blue-800"
+                  {(editingTask ? editingTask.tags : newTask.tags).map(
+                    (tag, index) => (
+                      <span
+                        key={index}
+                        className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800"
                       >
-                        <FiX size={12} />
-                      </button>
-                    </span>
-                  ))}
+                        {tag}
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveTag(index, !!editingTask)}
+                          className="ml-1 text-blue-600 hover:text-blue-800"
+                        >
+                          <FiX size={12} />
+                        </button>
+                      </span>
+                    )
+                  )}
                 </div>
                 <input
                   type="text"
@@ -442,7 +487,7 @@ const Task = () => {
                   type="submit"
                   className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
-                  {editingTask ? 'Update Task' : 'Create Task'}
+                  {editingTask ? "Update Task" : "Create Task"}
                 </button>
               </div>
             </form>
@@ -458,7 +503,7 @@ const Task = () => {
               <h3 className="text-lg font-semibold">
                 Assign Task: {assigningTask.title}
               </h3>
-              <button 
+              <button
                 onClick={() => setAssigningTask(null)}
                 className="text-gray-500 hover:text-gray-700"
               >
@@ -467,13 +512,13 @@ const Task = () => {
             </div>
             <div className="p-4">
               <div className="space-y-3 max-h-96 overflow-y-auto">
-                {employees.map(employee => (
-                  <div 
-                    key={employee.id} 
+                {employees.map((employee) => (
+                  <div
+                    key={employee.id}
                     className={`flex items-center justify-between p-3 border rounded-lg cursor-pointer ${
-                      (assigningTask.assignedTo || []).includes(employee.id) 
-                        ? 'border-blue-500 bg-blue-50' 
-                        : 'border-gray-200 hover:bg-gray-50'
+                      (assigningTask.assignedTo || []).includes(employee.id)
+                        ? "border-blue-500 bg-blue-50"
+                        : "border-gray-200 hover:bg-gray-50"
                     }`}
                     onClick={() => toggleAssignee(employee.id)}
                   >
@@ -482,8 +527,17 @@ const Task = () => {
                         {employee.username.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <p className="font-medium text-gray-800">{employee.username}</p>
-                        <p className="text-xs text-gray-500">{employee.roleDisplay} • {employee.email}</p>
+                        <p className="font-medium text-gray-800">
+                          {employee.username}
+                        </p>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full">
+                            {employee.roleDisplay}
+                          </span>
+                          <span className="text-xs text-gray-500">
+                            {employee.email}
+                          </span>
+                        </div>
                       </div>
                     </div>
                     {(assigningTask.assignedTo || []).includes(employee.id) && (
@@ -516,7 +570,9 @@ const Task = () => {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold text-gray-800">Tasks</h2>
         <div className="flex items-center gap-3">
-          <span className="text-xs text-gray-500">{new Date().toLocaleDateString()}</span>
+          <span className="text-xs text-gray-500">
+            {new Date().toLocaleDateString()}
+          </span>
           <div className="flex items-center gap-2">
             <button className="p-1.5 rounded-md hover:bg-gray-100">
               <FiFilter className="text-gray-500 text-sm" />
@@ -538,23 +594,25 @@ const Task = () => {
           />
         </div>
         <div className="relative">
-          <button 
+          <button
             className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-lg text-sm"
             onClick={toggleSortDropdown}
           >
             <FiCalendar className="text-gray-500" />
-            <span>Sort: {sortOrder === 'newest' ? 'Newest First' : 'Oldest First'}</span>
+            <span>
+              Sort: {sortOrder === "newest" ? "Newest First" : "Oldest First"}
+            </span>
             <FiChevronDown className="text-gray-500" />
           </button>
           {showSortDropdown && (
-            <div 
+            <div
               className="absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg z-10 border border-gray-200"
               onClick={(e) => e.stopPropagation()}
             >
               <button
                 className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 onClick={() => {
-                  setSortOrder('newest');
+                  setSortOrder("newest");
                   setShowSortDropdown(false);
                 }}
               >
@@ -563,7 +621,7 @@ const Task = () => {
               <button
                 className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 onClick={() => {
-                  setSortOrder('oldest');
+                  setSortOrder("oldest");
                   setShowSortDropdown(false);
                 }}
               >
@@ -576,25 +634,31 @@ const Task = () => {
 
       {/* View Type Selector */}
       <div className="flex gap-4 mb-4">
-        <button 
-          className={`text-center ${viewType === 'kanban' ? 'text-blue-600' : 'text-gray-500'}`}
-          onClick={() => setViewType('kanban')}
+        <button
+          className={`text-center ${
+            viewType === "kanban" ? "text-blue-600" : "text-gray-500"
+          }`}
+          onClick={() => setViewType("kanban")}
         >
           <div className="text-xs mb-1 flex items-center justify-center gap-1">
             <FiGrid className="text-xs" /> Kanban
           </div>
         </button>
-        <button 
-          className={`text-center ${viewType === 'table' ? 'text-blue-600' : 'text-gray-500'}`}
-          onClick={() => setViewType('table')}
+        <button
+          className={`text-center ${
+            viewType === "table" ? "text-blue-600" : "text-gray-500"
+          }`}
+          onClick={() => setViewType("table")}
         >
           <div className="text-xs mb-1 flex items-center justify-center gap-1">
             <FiTable className="text-xs" /> Table
           </div>
         </button>
-        <button 
-          className={`text-center ${viewType === 'list' ? 'text-blue-600' : 'text-gray-500'}`}
-          onClick={() => setViewType('list')}
+        <button
+          className={`text-center ${
+            viewType === "list" ? "text-blue-600" : "text-gray-500"
+          }`}
+          onClick={() => setViewType("list")}
         >
           <div className="text-xs mb-1 flex items-center justify-center gap-1">
             <FiAlignLeft className="text-xs" /> List View
@@ -605,23 +669,25 @@ const Task = () => {
       {/* Main Content Area with Scroll */}
       <div className="flex-1 overflow-y-auto">
         {/* Kanban View */}
-        {viewType === 'kanban' && (
+        {viewType === "kanban" && (
           <div className="grid grid-cols-3 gap-4 h-full">
-            {statusColumns.map(column => (
+            {statusColumns.map((column) => (
               <div key={column.id} className="flex flex-col h-full">
-                <div className={`text-sm font-medium p-2 rounded-lg bg-${column.color}-100 text-${column.color}-800`}>
+                <div
+                  className={`text-sm font-medium p-2 rounded-lg bg-${column.color}-100 text-${column.color}-800`}
+                >
                   {column.title}
                 </div>
                 <div className="flex-1 overflow-y-auto space-y-4 pr-2">
                   {sortedTasks
-                    .filter(task => task.status === column.title)
-                    .map(task => (
-                      <div 
-                        key={task.id} 
+                    .filter((task) => task.status === column.title)
+                    .map((task) => (
+                      <div
+                        key={task.id}
                         className="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-all duration-200 cursor-pointer hover:shadow-md hover:border-gray-300 hover:translate-y-[-2px]"
                       >
-                        <TaskCard 
-                          task={task} 
+                        <TaskCard
+                          task={task}
                           onEdit={handleEditTask}
                           onDelete={handleDeleteTask}
                           onStatusChange={handleStatusChange}
@@ -638,66 +704,102 @@ const Task = () => {
         )}
 
         {/* Table View */}
-        {viewType === 'table' && (
+        {viewType === "table" && (
           <div className="overflow-x-auto h-full">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50 sticky top-0">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assigned To</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Created</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Title
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Category
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Assigned To
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Date Created
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {sortedTasks.map(task => (
-                  <tr key={task.id} className="hover:bg-gray-50 transition-colors duration-150 group">
+                {sortedTasks.map((task) => (
+                  <tr
+                    key={task.id}
+                    className="hover:bg-gray-50 transition-colors duration-150 group"
+                  >
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 group-hover:text-blue-600">
                       {task.title}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <span className={`px-2 py-1 rounded-full text-xs group-hover:shadow-sm ${
-                        task.category === "Recruitment" ? "bg-blue-100 text-blue-800 group-hover:bg-blue-200" :
-                        task.category === "Finance" ? "bg-pink-100 text-pink-800 group-hover:bg-pink-200" :
-                        task.category === "Feedback" ? "bg-violet-100 text-violet-800 group-hover:bg-violet-200" :
-                        task.category === "Training" ? "bg-green-100 text-green-800 group-hover:bg-green-200" :
-                        "bg-orange-100 text-orange-800 group-hover:bg-orange-200"
-                      }`}>
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs group-hover:shadow-sm ${
+                          task.category === "Recruitment"
+                            ? "bg-blue-100 text-blue-800 group-hover:bg-blue-200"
+                            : task.category === "Finance"
+                            ? "bg-pink-100 text-pink-800 group-hover:bg-pink-200"
+                            : task.category === "Feedback"
+                            ? "bg-violet-100 text-violet-800 group-hover:bg-violet-200"
+                            : task.category === "Training"
+                            ? "bg-green-100 text-green-800 group-hover:bg-green-200"
+                            : "bg-orange-100 text-orange-800 group-hover:bg-orange-200"
+                        }`}
+                      >
                         {task.category}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <span className={`px-2 py-1 rounded-full text-xs group-hover:shadow-sm ${
-                        task.status === "New Request" ? "bg-blue-100 text-blue-800 group-hover:bg-blue-200" :
-                        task.status === "In Progress" ? "bg-yellow-100 text-yellow-800 group-hover:bg-yellow-200" :
-                        "bg-green-100 text-green-800 group-hover:bg-green-200"
-                      }`}>
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs group-hover:shadow-sm ${
+                          task.status === "New Request"
+                            ? "bg-blue-100 text-blue-800 group-hover:bg-blue-200"
+                            : task.status === "In Progress"
+                            ? "bg-yellow-100 text-yellow-800 group-hover:bg-yellow-200"
+                            : "bg-green-100 text-green-800 group-hover:bg-green-200"
+                        }`}
+                      >
                         {task.status}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       <div className="flex -space-x-2">
-                        {(task.assignedTo || []).slice(0, 3).map((userId, index) => {
-                          const employee = employees.find(e => e.id === userId);
-                          return employee ? (
-                            <div 
-                              key={index} 
-                              className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 border-2 border-white"
-                              title={`${employee.username} (${employee.roleDisplay})`}
-                            >
-                              {employee.username.charAt(0).toUpperCase()}
-                            </div>
-                          ) : null;
-                        })}
+                        {(task.assignedTo || [])
+                          .slice(0, 3)
+                          .map((userId, index) => {
+                            const employee = employees.find(
+                              (e) => e.id === userId
+                            );
+                            return employee ? (
+                              <div
+                                key={index}
+                                className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 border-2 border-white"
+                                title={`${employee.username} (${employee.roleDisplay})`}
+                              >
+                                {employee.username.charAt(0).toUpperCase()}
+                              </div>
+                            ) : null;
+                          })}
                         {(task.assignedTo || []).length > 3 && (
-                          <div 
+                          <div
                             className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-800 border-2 border-white"
-                            title={`${(task.assignedTo || []).slice(3).map(id => {
-                              const e = employees.find(emp => emp.id === id);
-                              return e ? `${e.username} (${e.roleDisplay})` : '';
-                            }).join(', ')}`}
+                            title={`${(task.assignedTo || [])
+                              .slice(3)
+                              .map((id) => {
+                                const e = employees.find(
+                                  (emp) => emp.id === id
+                                );
+                                return e
+                                  ? `${e.username} (${e.roleDisplay})`
+                                  : "";
+                              })
+                              .join(", ")}`}
                           >
                             +{(task.assignedTo || []).length - 3}
                           </div>
@@ -709,21 +811,21 @@ const Task = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       <div className="flex space-x-2">
-                        <button 
+                        <button
                           onClick={() => handleAssignTask(task)}
                           className="text-gray-600 hover:text-gray-800 p-1 rounded-full hover:bg-gray-100"
                           title="Assign"
                         >
                           <FiUser size={16} />
                         </button>
-                        <button 
+                        <button
                           onClick={() => handleEditTask(task)}
                           className="text-blue-600 hover:text-blue-800 p-1 rounded-full hover:bg-blue-100"
                           title="Edit"
                         >
                           <FiEdit2 size={16} />
                         </button>
-                        <button 
+                        <button
                           onClick={() => handleDeleteTask(task.id)}
                           className="text-red-600 hover:text-red-800 p-1 rounded-full hover:bg-red-100"
                           title="Delete"
@@ -740,33 +842,47 @@ const Task = () => {
         )}
 
         {/* List View */}
-        {viewType === 'list' && (
+        {viewType === "list" && (
           <div className="space-y-4 overflow-y-auto h-full pb-4">
-            {sortedTasks.map(task => (
-              <div 
-                key={task.id} 
+            {sortedTasks.map((task) => (
+              <div
+                key={task.id}
                 className="p-4 border border-gray-200 rounded-lg transition-all duration-200 hover:shadow-md hover:border-gray-300 hover:translate-y-[-2px]"
               >
                 <div className="flex justify-between items-start">
                   <div>
-                    <h3 className="font-medium text-gray-800 mb-1 hover:text-blue-600">{task.title}</h3>
-                    <p className="text-xs text-gray-500 mb-2 line-clamp-2 hover:text-gray-600">{task.description}</p>
+                    <h3 className="font-medium text-gray-800 mb-1 hover:text-blue-600">
+                      {task.title}
+                    </h3>
+                    <p className="text-xs text-gray-500 mb-2 line-clamp-2 hover:text-gray-600">
+                      {task.description}
+                    </p>
                   </div>
                   <div className="flex gap-2">
-                    <span className={`text-xs font-medium px-2 py-1 rounded-full hover:shadow-sm ${
-                      task.category === "Recruitment" ? "bg-blue-100 text-blue-800 hover:bg-blue-200" :
-                      task.category === "Finance" ? "bg-pink-100 text-pink-800 hover:bg-pink-200" :
-                      task.category === "Feedback" ? "bg-violet-100 text-violet-800 hover:bg-violet-200" :
-                      task.category === "Training" ? "bg-green-100 text-green-800 hover:bg-green-200" :
-                      "bg-orange-100 text-orange-800 hover:bg-orange-200"
-                    }`}>
+                    <span
+                      className={`text-xs font-medium px-2 py-1 rounded-full hover:shadow-sm ${
+                        task.category === "Recruitment"
+                          ? "bg-blue-100 text-blue-800 hover:bg-blue-200"
+                          : task.category === "Finance"
+                          ? "bg-pink-100 text-pink-800 hover:bg-pink-200"
+                          : task.category === "Feedback"
+                          ? "bg-violet-100 text-violet-800 hover:bg-violet-200"
+                          : task.category === "Training"
+                          ? "bg-green-100 text-green-800 hover:bg-green-200"
+                          : "bg-orange-100 text-orange-800 hover:bg-orange-200"
+                      }`}
+                    >
                       {task.category}
                     </span>
-                    <span className={`text-xs font-medium px-2 py-1 rounded-full hover:shadow-sm ${
-                      task.status === "New Request" ? "bg-blue-100 text-blue-800 hover:bg-blue-200" :
-                      task.status === "In Progress" ? "bg-yellow-100 text-yellow-800 hover:bg-yellow-200" :
-                      "bg-green-100 text-green-800 hover:bg-green-200"
-                    }`}>
+                    <span
+                      className={`text-xs font-medium px-2 py-1 rounded-full hover:shadow-sm ${
+                        task.status === "New Request"
+                          ? "bg-blue-100 text-blue-800 hover:bg-blue-200"
+                          : task.status === "In Progress"
+                          ? "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
+                          : "bg-green-100 text-green-800 hover:bg-green-200"
+                      }`}
+                    >
                       {task.status}
                     </span>
                   </div>
@@ -774,25 +890,34 @@ const Task = () => {
                 <div className="flex justify-between items-center mt-2">
                   <div className="flex items-center">
                     <div className="flex -space-x-2 mr-3">
-                      {(task.assignedTo || []).slice(0, 3).map((userId, index) => {
-                        const employee = employees.find(e => e.id === userId);
-                        return employee ? (
-                          <div 
-                            key={index} 
-                            className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 border-2 border-white text-xs"
-                            title={`${employee.username} (${employee.roleDisplay})`}
-                          >
-                            {employee.username.charAt(0).toUpperCase()}
-                          </div>
-                        ) : null;
-                      })}
+                      {(task.assignedTo || [])
+                        .slice(0, 3)
+                        .map((userId, index) => {
+                          const employee = employees.find(
+                            (e) => e.id === userId
+                          );
+                          return employee ? (
+                            <div
+                              key={index}
+                              className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 border-2 border-white text-xs"
+                              title={`${employee.username} (${employee.roleDisplay})`}
+                            >
+                              {employee.username.charAt(0).toUpperCase()}
+                            </div>
+                          ) : null;
+                        })}
                       {(task.assignedTo || []).length > 3 && (
-                        <div 
+                        <div
                           className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-800 border-2 border-white text-xs"
-                          title={`${(task.assignedTo || []).slice(3).map(id => {
-                            const e = employees.find(emp => emp.id === id);
-                            return e ? `${e.username} (${e.roleDisplay})` : '';
-                          }).join(', ')}`}
+                          title={`${(task.assignedTo || [])
+                            .slice(3)
+                            .map((id) => {
+                              const e = employees.find((emp) => emp.id === id);
+                              return e
+                                ? `${e.username} (${e.roleDisplay})`
+                                : "";
+                            })
+                            .join(", ")}`}
                         >
                           +{(task.assignedTo || []).length - 3}
                         </div>
@@ -803,19 +928,19 @@ const Task = () => {
                     </span>
                   </div>
                   <div className="flex space-x-2">
-                    <button 
+                    <button
                       onClick={() => handleAssignTask(task)}
                       className="text-gray-600 hover:text-gray-800 p-1 rounded-full hover:bg-gray-100 text-xs flex items-center"
                     >
                       <FiUser size={14} className="mr-1" /> Assign
                     </button>
-                    <button 
+                    <button
                       onClick={() => handleEditTask(task)}
                       className="text-blue-600 hover:text-blue-800 p-1 rounded-full hover:bg-blue-100 text-xs flex items-center"
                     >
                       <FiEdit2 size={14} className="mr-1" /> Edit
                     </button>
-                    <button 
+                    <button
                       onClick={() => handleDeleteTask(task.id)}
                       className="text-red-600 hover:text-red-800 p-1 rounded-full hover:bg-red-100 text-xs flex items-center"
                     >
@@ -829,7 +954,7 @@ const Task = () => {
         )}
       </div>
 
-      <button 
+      <button
         className="mt-4 w-full flex items-center justify-center gap-2 text-blue-600 hover:text-blue-800 text-sm font-medium py-2 border border-dashed border-gray-300 rounded-lg hover:bg-blue-50 transition-colors"
         onClick={() => setShowNewTaskModal(true)}
       >
@@ -841,50 +966,68 @@ const Task = () => {
 };
 
 // Enhanced Task Card Component with assign functionality
-const TaskCard = ({ task, onEdit, onDelete, onStatusChange, onAssign, statusColumns, employees }) => {
+const TaskCard = ({
+  task,
+  onEdit,
+  onDelete,
+  onStatusChange,
+  onAssign,
+  statusColumns,
+  employees,
+}) => {
   return (
     <>
       <div className="flex items-center justify-between mb-2">
         <div className="flex gap-1">
-          <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-            task.category === "Recruitment" ? "bg-blue-100 text-blue-800" :
-            task.category === "Finance" ? "bg-pink-100 text-pink-800" :
-            task.category === "Feedback" ? "bg-violet-100 text-violet-800" :
-            task.category === "Training" ? "bg-green-100 text-green-800" :
-            "bg-orange-100 text-orange-800"
-          }`}>
+          <span
+            className={`text-xs font-medium px-2 py-1 rounded-full ${
+              task.category === "Recruitment"
+                ? "bg-blue-100 text-blue-800"
+                : task.category === "Finance"
+                ? "bg-pink-100 text-pink-800"
+                : task.category === "Feedback"
+                ? "bg-violet-100 text-violet-800"
+                : task.category === "Training"
+                ? "bg-green-100 text-green-800"
+                : "bg-orange-100 text-orange-800"
+            }`}
+          >
             {task.category}
           </span>
-          {task.tags && task.tags.map((tag, index) => (
-            <span 
-              key={index}
-              className={`text-xs font-medium px-2 py-1 rounded-full ${
-                tag === "Compliance" ? "bg-green-100 text-green-800" :
-                tag === "Compensation" ? "bg-orange-100 text-orange-800" :
-                tag === "Engagement" ? "bg-blue-100 text-blue-800" :
-                "bg-purple-100 text-purple-800"
-              }`}
-            >
-              {tag}
-            </span>
-          ))}
+          {task.tags &&
+            task.tags.map((tag, index) => (
+              <span
+                key={index}
+                className={`text-xs font-medium px-2 py-1 rounded-full ${
+                  tag === "Compliance"
+                    ? "bg-green-100 text-green-800"
+                    : tag === "Compensation"
+                    ? "bg-orange-100 text-orange-800"
+                    : tag === "Engagement"
+                    ? "bg-blue-100 text-blue-800"
+                    : "bg-purple-100 text-purple-800"
+                }`}
+              >
+                {tag}
+              </span>
+            ))}
         </div>
         <div className="flex space-x-1">
-          <button 
+          <button
             onClick={() => onAssign(task)}
             className="text-gray-600 hover:text-gray-800 p-1 rounded-full hover:bg-gray-100"
             title="Assign"
           >
             <FiUser size={14} />
           </button>
-          <button 
+          <button
             onClick={() => onEdit(task)}
             className="text-blue-600 hover:text-blue-800 p-1 rounded-full hover:bg-blue-100"
             title="Edit"
           >
             <FiEdit2 size={14} />
           </button>
-          <button 
+          <button
             onClick={() => onDelete(task.id)}
             className="text-red-600 hover:text-red-800 p-1 rounded-full hover:bg-red-100"
             title="Delete"
@@ -893,18 +1036,20 @@ const TaskCard = ({ task, onEdit, onDelete, onStatusChange, onAssign, statusColu
           </button>
         </div>
       </div>
-      
+
       <h3 className="font-medium text-gray-800 mb-1">{task.title}</h3>
-      <p className="text-xs text-gray-500 mb-2 line-clamp-3">{task.description}</p>
-      
+      <p className="text-xs text-gray-500 mb-2 line-clamp-3">
+        {task.description}
+      </p>
+
       {/* Assigned users */}
       {(task.assignedTo || []).length > 0 && (
         <div className="flex -space-x-2 mb-2">
           {(task.assignedTo || []).slice(0, 3).map((userId, index) => {
-            const employee = employees.find(e => e.id === userId);
+            const employee = employees.find((e) => e.id === userId);
             return employee ? (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 border-2 border-white text-xs"
                 title={`${employee.username} (${employee.roleDisplay})`}
               >
@@ -913,19 +1058,22 @@ const TaskCard = ({ task, onEdit, onDelete, onStatusChange, onAssign, statusColu
             ) : null;
           })}
           {(task.assignedTo || []).length > 3 && (
-            <div 
+            <div
               className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-800 border-2 border-white text-xs"
-              title={`${(task.assignedTo || []).slice(3).map(id => {
-                const e = employees.find(emp => emp.id === id);
-                return e ? `${e.username} (${e.roleDisplay})` : '';
-              }).join(', ')}`}
+              title={`${(task.assignedTo || [])
+                .slice(3)
+                .map((id) => {
+                  const e = employees.find((emp) => emp.id === id);
+                  return e ? `${e.username} (${e.roleDisplay})` : "";
+                })
+                .join(", ")}`}
             >
               +{(task.assignedTo || []).length - 3}
             </div>
           )}
         </div>
       )}
-      
+
       <div className="flex justify-between items-center">
         <span className="text-xs text-gray-500">
           {new Date(task.dateCreated).toLocaleDateString()}
@@ -936,8 +1084,10 @@ const TaskCard = ({ task, onEdit, onDelete, onStatusChange, onAssign, statusColu
             onChange={(e) => onStatusChange(task.id, e.target.value)}
             className="text-xs border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
           >
-            {statusColumns.map(column => (
-              <option key={column.id} value={column.title}>{column.title}</option>
+            {statusColumns.map((column) => (
+              <option key={column.id} value={column.title}>
+                {column.title}
+              </option>
             ))}
           </select>
         )}
