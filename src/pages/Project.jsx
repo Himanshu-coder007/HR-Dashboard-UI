@@ -43,7 +43,10 @@ const Projects = () => {
   const teamMembers = [
     { id: 1, name: 'John Doe', role: 'Developer' },
     { id: 2, name: 'Jane Smith', role: 'Designer' },
-    { id: 3, name: 'Mike Johnson', role: 'Manager' }
+    { id: 3, name: 'Alice jones', role: 'Project Manager' },
+    { id: 4, name: 'Bob Williams', role: 'Business Analyst' },
+    { id: 5, name: 'Charlie Brown', role: 'Developer/Designer' }
+
   ];
 
   // Load sample data
@@ -99,6 +102,48 @@ const Projects = () => {
         comments: [
           { id: 1, author: 3, text: 'Campaign launched successfully', date: '2023-06-01' }
         ],
+        attachments: []
+      },
+      {
+        id: 4,
+        name: 'Product Database Migration',
+        description: 'Migrate legacy product database to new cloud system',
+        startDate: '2023-08-01',
+        dueDate: '2023-09-15',
+        status: 'in progress',
+        priority: 'high',
+        teamMembers: [1, 3],
+        tasks: [
+          { id: 1, title: 'Setup cloud environment', status: 'done', assignee: 1, dueDate: '2023-08-05' },
+          { id: 2, title: 'Data mapping', status: 'in progress', assignee: 1, dueDate: '2023-08-20' }
+        ],
+        comments: [],
+        attachments: []
+      },
+      {
+        id: 5,
+        name: 'Customer Portal',
+        description: 'Develop new customer self-service portal',
+        startDate: '2023-09-01',
+        dueDate: '2023-12-15',
+        status: 'not started',
+        priority: 'medium',
+        teamMembers: [1, 2],
+        tasks: [],
+        comments: [],
+        attachments: []
+      },
+      {
+        id: 6,
+        name: 'Annual Report',
+        description: 'Compile and design annual company report',
+        startDate: '2023-10-01',
+        dueDate: '2023-11-30',
+        status: 'not started',
+        priority: 'low',
+        teamMembers: [2, 3],
+        tasks: [],
+        comments: [],
         attachments: []
       }
     ];
@@ -265,6 +310,34 @@ const Projects = () => {
     setShowProjectForm(true);
   };
 
+  // Get status color
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'not started':
+        return 'bg-gray-200 text-gray-800';
+      case 'in progress':
+        return 'bg-blue-100 text-blue-800';
+      case 'completed':
+        return 'bg-green-100 text-green-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  // Get priority color
+  const getPriorityColor = (priority) => {
+    switch (priority) {
+      case 'high':
+        return 'bg-red-100 text-red-800';
+      case 'medium':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'low':
+        return 'bg-green-100 text-green-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
   return (
     <div className="bg-white h-screen overflow-auto container mx-auto px-4 py-8">
       {!selectedProject ? (
@@ -322,12 +395,56 @@ const Projects = () => {
           {/* Projects Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProjects.map(project => (
-              <ProjectCard 
+              <div 
                 key={project.id}
-                project={project}
-                teamMembers={teamMembers}
                 onClick={() => setSelectedProject(project)}
-              />
+                className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition cursor-pointer"
+              >
+                <div className="p-5">
+                  <div className="flex items-start justify-between mb-3">
+                    <FiFolder className="text-blue-500 text-2xl mt-1" />
+                    <div className="flex space-x-2">
+                      <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(project.status)}`}>
+                        {project.status.replace('_', ' ')}
+                      </span>
+                      <span className={`text-xs px-2 py-1 rounded-full ${getPriorityColor(project.priority)}`}>
+                        {project.priority}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <h3 className="text-lg font-semibold mb-2">{project.name}</h3>
+                  <p className="text-gray-600 text-sm mb-4">{project.description}</p>
+                  
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {project.teamMembers.map(memberId => {
+                      const member = teamMembers.find(m => m.id === memberId);
+                      return member ? (
+                        <span key={member.id} className="text-xs px-2 py-1 rounded-full bg-purple-100 text-purple-800">
+                          {member.name.split(' ')[0]}
+                        </span>
+                      ) : null;
+                    })}
+                  </div>
+                  
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-gray-500">Due: {project.dueDate}</span>
+                    <div className="flex items-center">
+                      <span className="text-gray-500 mr-2">{project.tasks.length} tasks</span>
+                      <div className="w-24 bg-gray-200 rounded-full h-2">
+                        {project.tasks.length > 0 && (
+                          <div 
+                            className="bg-blue-600 h-2 rounded-full" 
+                            style={{
+                              width: `${(project.tasks.filter(t => t.status === 'done').length / project.tasks.length * 100)}%`
+                            }}
+                          ></div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         </div>
