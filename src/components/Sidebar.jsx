@@ -14,13 +14,15 @@ import {
   FiHelpCircle,
   FiLogOut,
 } from "react-icons/fi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../store/userSlice";
+import { selectCurrentUser } from "../store/userSlice";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user = useSelector(selectCurrentUser);
 
   const handleLogout = async () => {
     try {
@@ -51,6 +53,7 @@ const Sidebar = () => {
       // You might want to show an error message to the user
     }
   };
+
   return (
     <div className="w-64 h-full bg-white text-gray-800 flex flex-col border-r border-gray-200">
       {/* Company Logo and Name */}
@@ -62,24 +65,28 @@ const Sidebar = () => {
       </div>
 
       {/* User Profile Section */}
-      <div className="p-4 border-b border-gray-200 flex items-center">
-        <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
-          <img
-            src="https://randomuser.me/api/portraits/men/1.jpg"
-            alt="Profile"
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.textContent = "👤";
-              e.target.className = "text-xl";
-            }}
-          />
+      {user && (
+        <div className="p-4 border-b border-gray-200 flex items-center">
+          <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+            <img
+              src="https://randomuser.me/api/portraits/men/1.jpg"
+              alt="Profile"
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.textContent = "👤";
+                e.target.className = "text-xl";
+              }}
+            />
+          </div>
+          <div className="ml-3">
+            <p className="font-medium">
+              {user.fullname}
+            </p>
+            <p className="text-sm text-gray-500">{user.email}</p>
+          </div>
         </div>
-        <div className="ml-3">
-          <p className="font-medium">Arnold Smith</p>
-          <p className="text-sm text-gray-500">arnoldsmith@gmail.com</p>
-        </div>
-      </div>
+      )}
 
       {/* Navigation Menu with Icons */}
       <nav className="flex-1 overflow-y-auto p-2">
