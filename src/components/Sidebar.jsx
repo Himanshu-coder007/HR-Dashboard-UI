@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import {
   FiHome,
   FiCheckSquare,
@@ -14,8 +14,43 @@ import {
   FiHelpCircle,
   FiLogOut,
 } from "react-icons/fi";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../store/userSlice";
 
 const Sidebar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      // Call the logout API
+      const response = await fetch("http://localhost:8080/api/v1/user/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Logout failed");
+      }
+
+      // Clear local storage
+      localStorage.removeItem("token");
+      localStorage.removeItem("userRole");
+
+      // Dispatch logout action to clear Redux state
+      dispatch(logout());
+
+      // Redirect to login page
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout error:", error);
+      // You might want to show an error message to the user
+    }
+  };
   return (
     <div className="w-64 h-full bg-white text-gray-800 flex flex-col border-r border-gray-200">
       {/* Company Logo and Name */}
@@ -54,8 +89,8 @@ const Sidebar = () => {
           </h3>
           <ul className="space-y-0.5">
             <li>
-              <Link 
-                to="/" 
+              <Link
+                to="/"
                 className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
               >
                 <FiHome className="text-lg" />
@@ -63,8 +98,8 @@ const Sidebar = () => {
               </Link>
             </li>
             <li>
-              <Link 
-                to="/tasks" 
+              <Link
+                to="/tasks"
                 className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
               >
                 <FiCheckSquare className="text-lg" />
@@ -72,8 +107,8 @@ const Sidebar = () => {
               </Link>
             </li>
             <li>
-              <Link 
-                to="/inbox" 
+              <Link
+                to="/inbox"
                 className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
               >
                 <FiInbox className="text-lg" />
@@ -81,8 +116,8 @@ const Sidebar = () => {
               </Link>
             </li>
             <li>
-              <Link 
-                to="/calender" 
+              <Link
+                to="/calender"
                 className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
               >
                 <FiCalendar className="text-lg" />
@@ -90,15 +125,14 @@ const Sidebar = () => {
               </Link>
             </li>
             <li>
-              <Link 
-                to="/projects" 
+              <Link
+                to="/projects"
                 className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
               >
                 <FiFolder className="text-lg" />
                 <span className="ml-3">Projects</span>
               </Link>
             </li>
-            
           </ul>
         </div>
 
@@ -108,8 +142,8 @@ const Sidebar = () => {
           </h3>
           <ul className="space-y-0.5">
             <li>
-              <Link 
-                to="/employees" 
+              <Link
+                to="/employees"
                 className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
               >
                 <FiUsers className="text-lg" />
@@ -117,8 +151,8 @@ const Sidebar = () => {
               </Link>
             </li>
             <li>
-              <Link 
-                to="/attendance" 
+              <Link
+                to="/attendance"
                 className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
               >
                 <FiClock className="text-lg" />
@@ -126,8 +160,8 @@ const Sidebar = () => {
               </Link>
             </li>
             <li>
-              <Link 
-                to="/payroll" 
+              <Link
+                to="/payroll"
                 className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
               >
                 <FiDollarSign className="text-lg" />
@@ -135,8 +169,8 @@ const Sidebar = () => {
               </Link>
             </li>
             <li>
-              <Link 
-                to="/hiring" 
+              <Link
+                to="/hiring"
                 className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
               >
                 <FiUserPlus className="text-lg" />
@@ -180,7 +214,10 @@ const Sidebar = () => {
 
       {/* Logout Section */}
       <div className="p-2 border-t border-gray-200">
-        <button className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors">
+        <button
+          onClick={handleLogout}
+          className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+        >
           <FiLogOut className="text-lg" />
           <span className="ml-3">Logout</span>
         </button>

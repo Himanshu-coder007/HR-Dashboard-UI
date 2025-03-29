@@ -63,7 +63,7 @@ function App() {
           {/* Available to both employees and HR */}
           <Route path="tasks" element={<EmployeeRoute><Task /></EmployeeRoute>} />
           <Route path="inbox" element={<EmployeeRoute><Inbox /></EmployeeRoute>} />
-          <Route path="calendar" element={<EmployeeRoute><Calendar /></EmployeeRoute>} />
+          <Route path="calender" element={<EmployeeRoute><Calendar /></EmployeeRoute>} />
           <Route path="projects" element={<EmployeeRoute><Project /></EmployeeRoute>} />
           
           {/* HR-only Routes */}
