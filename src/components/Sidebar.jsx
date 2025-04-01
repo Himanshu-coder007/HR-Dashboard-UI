@@ -192,11 +192,14 @@ const Sidebar = () => {
             Analytics & Reports
           </h3>
           <ul className="space-y-0.5">
-            <li>
-              <button className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors">
+          <li>
+              <Link
+                to="/analytics"
+                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
                 <FiBarChart2 className="text-lg" />
                 <span className="ml-3">Reports</span>
-              </button>
+              </Link>
             </li>
           </ul>
         </div>

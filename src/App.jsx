@@ -13,6 +13,7 @@ import Payroll from './pages/Payroll';
 import Hiring from './pages/Hiring';
 import AuthPage from './auth/Auth';
 import Unauthorized from './pages/Unauthorized';
+import Analytics from './pages/Analytics';
 
 // Protected Route Component
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
@@ -71,6 +72,7 @@ function App() {
           <Route path="attendance" element={<HRRoute><Attendance /></HRRoute>} />
           <Route path="payroll" element={<HRRoute><Payroll /></HRRoute>} />
           <Route path="hiring" element={<HRRoute><Hiring /></HRRoute>} />
+          <Route path="analytics" element={<HRRoute><Analytics /></HRRoute>} />
         </Route>
         
         {/* Catch-all route */}
