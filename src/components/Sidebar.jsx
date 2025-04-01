@@ -80,10 +80,9 @@ const Sidebar = () => {
             />
           </div>
           <div className="ml-3">
-            <p className="font-medium">
-              {user.fullname}
-            </p>
+            <p className="font-medium">{user.fullname}</p>
             <p className="text-sm text-gray-500">{user.email}</p>
+            <p className="text-xs text-blue-600 capitalize">{user.role}</p>
           </div>
         </div>
       )}
@@ -143,67 +142,73 @@ const Sidebar = () => {
           </ul>
         </div>
 
-        <div className="mb-1">
-          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-1">
-            HR Management
-          </h3>
-          <ul className="space-y-0.5">
-            <li>
-              <Link
-                to="/employees"
-                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                <FiUsers className="text-lg" />
-                <span className="ml-3">Employees</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/attendance"
-                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                <FiClock className="text-lg" />
-                <span className="ml-3">Attendance</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/payroll"
-                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                <FiDollarSign className="text-lg" />
-                <span className="ml-3">Payroll</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/hiring"
-                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                <FiUserPlus className="text-lg" />
-                <span className="ml-3">Hiring</span>
-              </Link>
-            </li>
-          </ul>
-        </div>
+        {/* HR Management Section - Only visible to HR users */}
+        {user?.role === "hr" && (
+          <>
+            <div className="mb-1">
+              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-1">
+                HR Management
+              </h3>
+              <ul className="space-y-0.5">
+                <li>
+                  <Link
+                    to="/employees"
+                    className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    <FiUsers className="text-lg" />
+                    <span className="ml-3">Employees</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/attendance"
+                    className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    <FiClock className="text-lg" />
+                    <span className="ml-3">Attendance</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/payroll"
+                    className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    <FiDollarSign className="text-lg" />
+                    <span className="ml-3">Payroll</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/hiring"
+                    className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    <FiUserPlus className="text-lg" />
+                    <span className="ml-3">Hiring</span>
+                  </Link>
+                </li>
+              </ul>
+            </div>
 
-        <div className="mb-1">
-          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-1">
-            Analytics & Reports
-          </h3>
-          <ul className="space-y-0.5">
-          <li>
-              <Link
-                to="/analytics"
-                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                <FiBarChart2 className="text-lg" />
-                <span className="ml-3">Reports</span>
-              </Link>
-            </li>
-          </ul>
-        </div>
+            <div className="mb-1">
+              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-1">
+                Analytics & Reports
+              </h3>
+              <ul className="space-y-0.5">
+                <li>
+                  <Link
+                    to="/analytics"
+                    className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    <FiBarChart2 className="text-lg" />
+                    <span className="ml-3">Reports</span>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </>
+        )}
 
+        {/* Common Settings Section */}
         <div>
           <ul className="space-y-0.5">
             <li>
@@ -233,19 +238,21 @@ const Sidebar = () => {
         </button>
       </div>
 
-      {/* Plan Information Section */}
-      <div className="p-4 border-t border-gray-200 bg-blue-50 mt-auto">
-        <div className="flex justify-between items-center mb-1">
-          <span className="font-medium text-sm">Basic Plan</span>
-          <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-            Trial
-          </span>
+      {/* Plan Information Section - Only visible to HR users */}
+      {user?.role === "hr" && (
+        <div className="p-4 border-t border-gray-200 bg-blue-50 mt-auto">
+          <div className="flex justify-between items-center mb-1">
+            <span className="font-medium text-sm">Basic Plan</span>
+            <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+              Trial
+            </span>
+          </div>
+          <p className="text-xs text-gray-600 mb-2">Trial ends in 4 days</p>
+          <p className="text-xs text-gray-500">
+            You are on a free trial of the Basic plan on monthly billing.
+          </p>
         </div>
-        <p className="text-xs text-gray-600 mb-2">Trial ends in 4 days</p>
-        <p className="text-xs text-gray-500">
-          You are on a free trial of the Basic plan on monthly billing.
-        </p>
-      </div>
+      )}
     </div>
   );
 };
