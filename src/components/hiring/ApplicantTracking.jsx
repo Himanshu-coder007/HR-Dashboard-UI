@@ -1,4 +1,4 @@
-import { FiSearch, FiFilter, FiUser, FiMail, FiPhone, FiClock, FiCheck, FiX, FiMoreHorizontal, FiCalendar } from 'react-icons/fi';
+import { FiSearch, FiFilter, FiUser, FiMail, FiPhone, FiClock, FiCheck, FiX, FiMoreHorizontal, FiCalendar, FiDownload } from 'react-icons/fi';
 import { useState } from 'react';
 
 const ApplicantTracking = () => {
@@ -102,188 +102,280 @@ const ApplicantTracking = () => {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'Applied':
-        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"><FiClock className="mr-1" /> Applied</span>;
+        return <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800"><FiClock className="mr-1" /> Applied</span>;
       case 'Shortlisted':
-        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800"><FiUser className="mr-1" /> Shortlisted</span>;
+        return <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-800"><FiUser className="mr-1" /> Shortlisted</span>;
       case 'Interview Scheduled':
-        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"><FiCalendar className="mr-1" /> Interview</span>;
+        return <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800"><FiCalendar className="mr-1" /> Interview</span>;
       case 'Hired':
-        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"><FiCheck className="mr-1" /> Hired</span>;
+        return <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800"><FiCheck className="mr-1" /> Hired</span>;
       case 'Rejected':
-        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"><FiX className="mr-1" /> Rejected</span>;
+        return <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800"><FiX className="mr-1" /> Rejected</span>;
       default:
-        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">{status}</span>;
+        return <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-800">{status}</span>;
     }
   };
 
   return (
-    <div>
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Applicant Tracking System</h2>
+    <div className="min-h-screen p-6 bg-gradient-to-br from-blue-50 to-purple-50">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold text-indigo-900 mb-2">Applicant Tracking System</h2>
+          <p className="text-indigo-600">Manage all your job applications in one place</p>
+        </div>
         
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
-          <div className="relative rounded-md shadow-sm w-full md:w-1/3">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FiSearch className="text-gray-400" />
+        {/* Filters */}
+        <div className="bg-gradient-to-r from-indigo-100 to-purple-100 rounded-xl shadow-md p-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="md:col-span-2">
+              <label htmlFor="search" className="block text-sm font-medium text-indigo-700 mb-1">Search Applicants</label>
+              <div className="relative rounded-lg shadow-sm">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FiSearch className="text-indigo-400" />
+                </div>
+                <input
+                  type="text"
+                  id="search"
+                  className="block w-full pl-10 pr-3 py-2 border border-indigo-100 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="Search by name, email or position..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
             </div>
-            <input
-              type="text"
-              className="focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md py-2"
-              placeholder="Search applicants..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          
-          <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
-            <select
-              className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-            >
-              {statusOptions.map(option => (
-                <option key={option} value={option}>{option}</option>
-              ))}
-            </select>
             
-            <select
-              className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
-              value={positionFilter}
-              onChange={(e) => setPositionFilter(e.target.value)}
-            >
-              {positionOptions.map(option => (
-                <option key={option} value={option}>{option}</option>
-              ))}
-            </select>
+            <div>
+              <label htmlFor="status" className="block text-sm font-medium text-indigo-700 mb-1">Status</label>
+              <select
+                id="status"
+                className="block w-full pl-3 pr-10 py-2 border border-indigo-100 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+              >
+                {statusOptions.map(option => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
+            </div>
+            
+            <div>
+              <label htmlFor="position" className="block text-sm font-medium text-indigo-700 mb-1">Position</label>
+              <select
+                id="position"
+                className="block w-full pl-3 pr-10 py-2 border border-indigo-100 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                value={positionFilter}
+                onChange={(e) => setPositionFilter(e.target.value)}
+              >
+                {positionOptions.map(option => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Applied</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
-              <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {filteredApplicants.map((applicant) => (
-              <tr key={applicant.id}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-                      <FiUser className="h-6 w-6 text-gray-500" />
-                    </div>
-                    <div className="ml-4">
-                      <div className="text-sm font-medium text-gray-900">{applicant.name}</div>
-                      <div className="text-sm text-gray-500">{applicant.email}</div>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{applicant.position}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <div className="flex items-center">
-                    <FiMail className="mr-2 text-gray-400" />
-                    {applicant.email}
-                  </div>
-                  <div className="flex items-center mt-1">
-                    <FiPhone className="mr-2 text-gray-400" />
-                    {applicant.phone}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {getStatusBadge(applicant.status)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{applicant.appliedDate}</td>
-                <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
-                  {applicant.notes || 'No notes'}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <div className="flex justify-end space-x-2">
-                    <select
-                      value={applicant.status}
-                      onChange={(e) => updateApplicantStatus(applicant.id, e.target.value)}
-                      className="block w-full pl-2 pr-8 py-1 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
-                    >
-                      {statusOptions.filter(opt => opt !== 'All').map(option => (
-                        <option key={option} value={option}>{option}</option>
-                      ))}
-                    </select>
-                    <button
-                      onClick={() => {
-                        setSelectedApplicant(applicant);
-                        setIsNotesModalOpen(true);
-                      }}
-                      className="text-gray-600 hover:text-gray-900"
-                    >
-                      <FiMoreHorizontal />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+          <div className="bg-white rounded-xl shadow-md p-4 border-t-4 border-blue-500">
+            <div className="text-sm font-medium text-gray-500">Total</div>
+            <div className="text-2xl font-bold text-blue-600">{applicants.length}</div>
+          </div>
+          <div className="bg-white rounded-xl shadow-md p-4 border-t-4 border-purple-500">
+            <div className="text-sm font-medium text-gray-500">Shortlisted</div>
+            <div className="text-2xl font-bold text-purple-600">{applicants.filter(a => a.status === 'Shortlisted').length}</div>
+          </div>
+          <div className="bg-white rounded-xl shadow-md p-4 border-t-4 border-amber-500">
+            <div className="text-sm font-medium text-gray-500">Interview</div>
+            <div className="text-2xl font-bold text-amber-600">{applicants.filter(a => a.status === 'Interview Scheduled').length}</div>
+          </div>
+          <div className="bg-white rounded-xl shadow-md p-4 border-t-4 border-green-500">
+            <div className="text-sm font-medium text-gray-500">Hired</div>
+            <div className="text-2xl font-bold text-green-600">{applicants.filter(a => a.status === 'Hired').length}</div>
+          </div>
+          <div className="bg-white rounded-xl shadow-md p-4 border-t-4 border-rose-500">
+            <div className="text-sm font-medium text-gray-500">Rejected</div>
+            <div className="text-2xl font-bold text-rose-600">{applicants.filter(a => a.status === 'Rejected').length}</div>
+          </div>
+        </div>
 
-      {/* Notes Modal */}
-      {isNotesModalOpen && selectedApplicant && (
-        <div className="fixed z-10 inset-0 overflow-y-auto">
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+        {/* Applicants Table */}
+        <div className="bg-white rounded-xl shadow-md overflow-hidden">
+          {filteredApplicants.length === 0 ? (
+            <div className="p-8 text-center">
+              <div className="mx-auto h-24 w-24 text-indigo-400 mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 mb-1">No applicants found</h3>
+              <p className="text-gray-500 mb-4">Try adjusting your search or filter criteria</p>
             </div>
-            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
-              <div>
-                <div className="mt-3 text-center sm:mt-0 sm:text-left">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">
-                    Notes for {selectedApplicant.name}
-                  </h3>
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-500 mb-2 whitespace-pre-line">
-                      {selectedApplicant.notes || 'No notes yet'}
-                    </p>
-                    <textarea
-                      rows={3}
-                      className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border border-gray-300 rounded-md"
-                      placeholder="Add a new note..."
-                      value={newNote}
-                      onChange={(e) => setNewNote(e.target.value)}
-                    />
+          ) : (
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-indigo-50">
+                <tr>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-indigo-700 uppercase tracking-wider">Candidate</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-indigo-700 uppercase tracking-wider">Position</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-indigo-700 uppercase tracking-wider">Contact</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-indigo-700 uppercase tracking-wider">Status</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-indigo-700 uppercase tracking-wider">Applied</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-indigo-700 uppercase tracking-wider">Notes</th>
+                  <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-indigo-700 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {filteredApplicants.map((applicant) => (
+                  <tr key={applicant.id} className="hover:bg-indigo-50 transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                          <FiUser className="h-6 w-6 text-indigo-600" />
+                        </div>
+                        <div className="ml-4">
+                          <div className="text-sm font-semibold text-indigo-900">{applicant.name}</div>
+                          <div className="text-sm text-indigo-600">{applicant.email}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-800 font-medium">
+                        {applicant.position}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center text-sm text-gray-700">
+                        <FiMail className="mr-2 text-indigo-400" />
+                        {applicant.email}
+                      </div>
+                      <div className="flex items-center mt-1 text-sm text-gray-700">
+                        <FiPhone className="mr-2 text-indigo-400" />
+                        {applicant.phone}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {getStatusBadge(applicant.status)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                      <div className="flex items-center">
+                        <FiCalendar className="mr-2 text-indigo-400" />
+                        {applicant.appliedDate}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-700 max-w-xs">
+                      <div className="line-clamp-2">
+                        {applicant.notes || 'No notes'}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <div className="flex justify-end space-x-2">
+                        <select
+                          value={applicant.status}
+                          onChange={(e) => updateApplicantStatus(applicant.id, e.target.value)}
+                          className="block w-full pl-2 pr-8 py-1 text-sm border border-indigo-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        >
+                          {statusOptions.filter(opt => opt !== 'All').map(option => (
+                            <option key={option} value={option}>{option}</option>
+                          ))}
+                        </select>
+                        <button
+                          onClick={() => {
+                            setSelectedApplicant(applicant);
+                            setIsNotesModalOpen(true);
+                          }}
+                          className="p-2 text-indigo-600 hover:text-indigo-900 hover:bg-indigo-100 rounded-lg transition-colors"
+                          title="View/Add Notes"
+                        >
+                          <FiMoreHorizontal />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+
+        {/* Notes Modal */}
+        {isNotesModalOpen && selectedApplicant && (
+          <div className="fixed z-50 inset-0 overflow-y-auto">
+            <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+              <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+              </div>
+              <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+              <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div className="bg-white px-6 pt-5 pb-4 sm:p-6">
+                  <div className="sm:flex sm:items-start">
+                    <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                      <h3 className="text-xl leading-6 font-bold text-indigo-900 mb-2">
+                        {selectedApplicant.name} - {selectedApplicant.position}
+                      </h3>
+                      <div className="flex items-center mb-4">
+                        {getStatusBadge(selectedApplicant.status)}
+                        <span className="ml-3 text-sm text-gray-500">
+                          Applied on {selectedApplicant.appliedDate}
+                        </span>
+                      </div>
+                      
+                      <div className="bg-indigo-50 rounded-lg p-4 mb-4">
+                        <h4 className="text-sm font-medium text-indigo-700 mb-2">Current Notes</h4>
+                        <p className="text-sm text-gray-700 whitespace-pre-line">
+                          {selectedApplicant.notes || 'No notes yet'}
+                        </p>
+                      </div>
+                      
+                      <div className="mb-4">
+                        <label htmlFor="newNote" className="block text-sm font-medium text-indigo-700 mb-1">
+                          Add New Note
+                        </label>
+                        <textarea
+                          id="newNote"
+                          rows={3}
+                          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-indigo-100 rounded-lg p-2"
+                          placeholder="Enter your notes here..."
+                          value={newNote}
+                          onChange={(e) => setNewNote(e.target.value)}
+                        />
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <a 
+                          href={`#download-${selectedApplicant.resume}`} 
+                          className="inline-flex items-center text-sm text-indigo-600 hover:text-indigo-900"
+                        >
+                          <FiDownload className="mr-1" />
+                          Download Resume
+                        </a>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-                <button
-                  type="button"
-                  onClick={addNote}
-                  disabled={!newNote.trim()}
-                  className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${!newNote.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}
-                >
-                  Add Note
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsNotesModalOpen(false);
-                    setNewNote('');
-                  }}
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm"
-                >
-                  Close
-                </button>
+                <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                  <button
+                    type="button"
+                    onClick={addNote}
+                    disabled={!newNote.trim()}
+                    className={`w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-base font-medium text-white hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm ${!newNote.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  >
+                    Add Note
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsNotesModalOpen(false);
+                      setNewNote('');
+                    }}
+                    className="mt-3 w-full inline-flex justify-center rounded-lg border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                  >
+                    Close
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
