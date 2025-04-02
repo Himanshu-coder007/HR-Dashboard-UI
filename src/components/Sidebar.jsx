@@ -55,19 +55,19 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-64 h-full bg-white text-gray-800 flex flex-col border-r border-gray-200">
+    <div className="w-64 h-full bg-gray-900 text-gray-200 flex flex-col border-r border-gray-800">
       {/* Company Logo and Name */}
-      <div className="p-4 border-b border-gray-200 flex items-center space-x-3">
-        <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-xl font-bold">
+      <div className="p-4 border-b border-gray-800 flex items-center space-x-3">
+        <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-xl font-bold">
           <span className="text-white">⚡</span>
         </div>
-        <h1 className="text-lg font-bold">Efficio</h1>
+        <h1 className="text-lg font-bold text-white">Efficio</h1>
       </div>
 
       {/* User Profile Section */}
       {user && (
-        <div className="p-4 border-b border-gray-200 flex items-center">
-          <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+        <div className="p-4 border-b border-gray-800 flex items-center">
+          <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center overflow-hidden border border-gray-700">
             <img
               src="https://randomuser.me/api/portraits/men/1.jpg"
               alt="Profile"
@@ -75,68 +75,68 @@ const Sidebar = () => {
               onError={(e) => {
                 e.target.onerror = null;
                 e.target.textContent = "👤";
-                e.target.className = "text-xl";
+                e.target.className = "text-xl text-gray-400";
               }}
             />
           </div>
           <div className="ml-3">
-            <p className="font-medium">{user.fullname}</p>
-            <p className="text-sm text-gray-500">{user.email}</p>
-            <p className="text-xs text-blue-600 capitalize">{user.role}</p>
+            <p className="font-medium text-white">{user.fullname}</p>
+            <p className="text-sm text-gray-400">{user.email}</p>
+            <p className="text-xs text-blue-400 capitalize">{user.role}</p>
           </div>
         </div>
       )}
 
       {/* Navigation Menu with Icons */}
       <nav className="flex-1 overflow-y-auto p-2">
-        <div className="mb-1">
-          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-1">
+        <div className="mb-4">
+          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
             Main Menu
           </h3>
-          <ul className="space-y-0.5">
+          <ul className="space-y-1">
             <li>
               <Link
                 to="/"
-                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-800 transition-colors group"
               >
-                <FiHome className="text-lg" />
-                <span className="ml-3">Dashboard</span>
+                <FiHome className="text-lg text-gray-400 group-hover:text-blue-400" />
+                <span className="ml-3 group-hover:text-white">Dashboard</span>
               </Link>
             </li>
             <li>
               <Link
                 to="/tasks"
-                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-800 transition-colors group"
               >
-                <FiCheckSquare className="text-lg" />
-                <span className="ml-3">Tasks</span>
+                <FiCheckSquare className="text-lg text-gray-400 group-hover:text-blue-400" />
+                <span className="ml-3 group-hover:text-white">Tasks</span>
               </Link>
             </li>
             <li>
               <Link
                 to="/inbox"
-                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-800 transition-colors group"
               >
-                <FiInbox className="text-lg" />
-                <span className="ml-3">Inbox</span>
+                <FiInbox className="text-lg text-gray-400 group-hover:text-blue-400" />
+                <span className="ml-3 group-hover:text-white">Inbox</span>
               </Link>
             </li>
             <li>
               <Link
                 to="/calender"
-                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-800 transition-colors group"
               >
-                <FiCalendar className="text-lg" />
-                <span className="ml-3">Calendar</span>
+                <FiCalendar className="text-lg text-gray-400 group-hover:text-blue-400" />
+                <span className="ml-3 group-hover:text-white">Calendar</span>
               </Link>
             </li>
             <li>
               <Link
                 to="/projects"
-                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                className="flex items-center w-full p-2 rounded-lg hover:bg-gray-800 transition-colors group"
               >
-                <FiFolder className="text-lg" />
-                <span className="ml-3">Projects</span>
+                <FiFolder className="text-lg text-gray-400 group-hover:text-blue-400" />
+                <span className="ml-3 group-hover:text-white">Projects</span>
               </Link>
             </li>
           </ul>
@@ -145,62 +145,62 @@ const Sidebar = () => {
         {/* HR Management Section - Only visible to HR users */}
         {user?.role === "hr" && (
           <>
-            <div className="mb-1">
-              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-1">
+            <div className="mb-4">
+              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
                 HR Management
               </h3>
-              <ul className="space-y-0.5">
+              <ul className="space-y-1">
                 <li>
                   <Link
                     to="/employees"
-                    className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                    className="flex items-center w-full p-2 rounded-lg hover:bg-gray-800 transition-colors group"
                   >
-                    <FiUsers className="text-lg" />
-                    <span className="ml-3">Employees</span>
+                    <FiUsers className="text-lg text-gray-400 group-hover:text-blue-400" />
+                    <span className="ml-3 group-hover:text-white">Employees</span>
                   </Link>
                 </li>
                 <li>
                   <Link
                     to="/attendance"
-                    className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                    className="flex items-center w-full p-2 rounded-lg hover:bg-gray-800 transition-colors group"
                   >
-                    <FiClock className="text-lg" />
-                    <span className="ml-3">Attendance</span>
+                    <FiClock className="text-lg text-gray-400 group-hover:text-blue-400" />
+                    <span className="ml-3 group-hover:text-white">Attendance</span>
                   </Link>
                 </li>
                 <li>
                   <Link
                     to="/payroll"
-                    className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                    className="flex items-center w-full p-2 rounded-lg hover:bg-gray-800 transition-colors group"
                   >
-                    <FiDollarSign className="text-lg" />
-                    <span className="ml-3">Payroll</span>
+                    <FiDollarSign className="text-lg text-gray-400 group-hover:text-blue-400" />
+                    <span className="ml-3 group-hover:text-white">Payroll</span>
                   </Link>
                 </li>
                 <li>
                   <Link
                     to="/hiring"
-                    className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                    className="flex items-center w-full p-2 rounded-lg hover:bg-gray-800 transition-colors group"
                   >
-                    <FiUserPlus className="text-lg" />
-                    <span className="ml-3">Hiring</span>
+                    <FiUserPlus className="text-lg text-gray-400 group-hover:text-blue-400" />
+                    <span className="ml-3 group-hover:text-white">Hiring</span>
                   </Link>
                 </li>
               </ul>
             </div>
 
-            <div className="mb-1">
-              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-1">
+            <div className="mb-4">
+              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
                 Analytics & Reports
               </h3>
-              <ul className="space-y-0.5">
+              <ul className="space-y-1">
                 <li>
                   <Link
                     to="/analytics"
-                    className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                    className="flex items-center w-full p-2 rounded-lg hover:bg-gray-800 transition-colors group"
                   >
-                    <FiBarChart2 className="text-lg" />
-                    <span className="ml-3">Reports</span>
+                    <FiBarChart2 className="text-lg text-gray-400 group-hover:text-blue-400" />
+                    <span className="ml-3 group-hover:text-white">Reports</span>
                   </Link>
                 </li>
               </ul>
@@ -209,18 +209,18 @@ const Sidebar = () => {
         )}
 
         {/* Common Settings Section */}
-        <div>
-          <ul className="space-y-0.5">
+        <div className="mb-4">
+          <ul className="space-y-1">
             <li>
-              <button className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors">
-                <FiSettings className="text-lg" />
-                <span className="ml-3">Settings</span>
+              <button className="flex items-center w-full p-2 rounded-lg hover:bg-gray-800 transition-colors group">
+                <FiSettings className="text-lg text-gray-400 group-hover:text-blue-400" />
+                <span className="ml-3 group-hover:text-white">Settings</span>
               </button>
             </li>
             <li>
-              <button className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors">
-                <FiHelpCircle className="text-lg" />
-                <span className="ml-3">Help & Support</span>
+              <button className="flex items-center w-full p-2 rounded-lg hover:bg-gray-800 transition-colors group">
+                <FiHelpCircle className="text-lg text-gray-400 group-hover:text-blue-400" />
+                <span className="ml-3 group-hover:text-white">Help & Support</span>
               </button>
             </li>
           </ul>
@@ -228,26 +228,26 @@ const Sidebar = () => {
       </nav>
 
       {/* Logout Section */}
-      <div className="p-2 border-t border-gray-200">
+      <div className="p-2 border-t border-gray-800">
         <button
           onClick={handleLogout}
-          className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          className="flex items-center w-full p-2 rounded-lg hover:bg-gray-800 transition-colors group"
         >
-          <FiLogOut className="text-lg" />
-          <span className="ml-3">Logout</span>
+          <FiLogOut className="text-lg text-gray-400 group-hover:text-red-400" />
+          <span className="ml-3 group-hover:text-white">Logout</span>
         </button>
       </div>
 
       {/* Plan Information Section - Only visible to HR users */}
       {user?.role === "hr" && (
-        <div className="p-4 border-t border-gray-200 bg-blue-50 mt-auto">
+        <div className="p-4 border-t border-gray-800 bg-gray-800 mt-auto">
           <div className="flex justify-between items-center mb-1">
-            <span className="font-medium text-sm">Basic Plan</span>
-            <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+            <span className="font-medium text-sm text-white">Basic Plan</span>
+            <span className="text-xs bg-blue-900 text-blue-300 px-2 py-1 rounded-full">
               Trial
             </span>
           </div>
-          <p className="text-xs text-gray-600 mb-2">Trial ends in 4 days</p>
+          <p className="text-xs text-gray-400 mb-2">Trial ends in 4 days</p>
           <p className="text-xs text-gray-500">
             You are on a free trial of the Basic plan on monthly billing.
           </p>

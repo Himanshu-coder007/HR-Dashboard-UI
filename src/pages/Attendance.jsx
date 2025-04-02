@@ -10,7 +10,7 @@ const Attendance = () => {
   const [showSheet, setShowSheet] = useState(false);
 
   return (
-    <div className="p-6 bg-white">
+    <div className="p-6 bg-grey-200">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Attendance Dashboard</h1>
         <button

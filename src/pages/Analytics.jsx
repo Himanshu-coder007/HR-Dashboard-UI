@@ -30,7 +30,7 @@ const Analytics = () => {
   const [activeTab, setActiveTab] = useState('predictive');
 
   return (
-    <div className="min-h-screen overflow-auto bg-white p-4 md:p-8">
+    <div className="min-h-screen overflow-auto bg-grey-200 p-4 md:p-8">
       <header className="mb-8">
         <h1 className="text-3xl font-bold text-gray-800">Analytics</h1>
       </header>
