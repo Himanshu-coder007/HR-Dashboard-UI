@@ -27,7 +27,7 @@ const Sidebar = () => {
   const handleLogout = async () => {
     try {
       // Call the logout API
-      const response = await fetch("http://localhost:8080/api/v1/user/logout", {
+      const response = await fetch("https://hr-dashboard-backend-22fu.onrender.com/api/v1/user/logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
