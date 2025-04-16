@@ -1,13 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setCredentials } from "../store/userSlice"; // Adjust path as needed
+import { setCredentials } from "../store/userSlice";
 
 const AuthPage = () => {
+  const [isLogin, setIsLogin] = useState(true); // Toggle between login/register
   const [formData, setFormData] = useState({
+    fullname: "",
     email: "",
+    phoneNumber: "",
     password: "",
-    role: "employee" // default role
+    confirmPassword: "",
+    role: "employee",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -27,17 +31,38 @@ const AuthPage = () => {
     setLoading(true);
     setError("");
 
+    // Validation for registration
+    if (!isLogin && formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      setLoading(false);
+      return;
+    }
+
     try {
-      const response = await fetch("https://hr-dashboard-backend-22fu.onrender.com/api/v1/user/login", {
+      const endpoint = isLogin
+        ? "https://hr-dashboard-backend-22fu.onrender.com/api/v1/user/login"
+        : "https://hr-dashboard-backend-22fu.onrender.com/api/v1/user/register";
+
+      const body = isLogin
+        ? {
+            email: formData.email,
+            password: formData.password,
+            role: formData.role,
+          }
+        : {
+            fullname: formData.fullname,
+            email: formData.email,
+            phoneNumber: formData.phoneNumber,
+            password: formData.password,
+            role: formData.role,
+          };
+
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-          role: formData.role
-        }),
+        body: JSON.stringify(body),
       });
 
       const data = await response.json();
@@ -46,15 +71,25 @@ const AuthPage = () => {
         throw new Error(data.message || "Authentication failed");
       }
 
-      // Save to Redux store
-      dispatch(setCredentials({ 
-        user: data.user, // Make sure your backend returns user data
-        token: data.token 
-      }));
-      
-      // Optionally save to localStorage
-      localStorage.setItem("token", data.token);
-      navigate("/");
+      if (isLogin) {
+        // Save to Redux store for login
+        dispatch(
+          setCredentials({
+            user: data.user,
+            token: data.token,
+          })
+        );
+        localStorage.setItem("token", data.token);
+        navigate("/");
+      } else {
+        // For registration, switch to login form
+        setIsLogin(true);
+        setFormData({
+          email: formData.email,
+          password: "",
+          role: formData.role,
+        });
+      }
     } catch (err) {
       setError(err.message);
     } finally {
@@ -66,8 +101,31 @@ const AuthPage = () => {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Sign in to your account
+          {isLogin ? "Sign in to your account" : "Create a new account"}
         </h2>
+        <p className="mt-2 text-center text-sm text-gray-600">
+          {isLogin ? (
+            <>
+              Or{" "}
+              <button
+                onClick={() => setIsLogin(false)}
+                className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none"
+              >
+                register for an account
+              </button>
+            </>
+          ) : (
+            <>
+              Already have an account?{" "}
+              <button
+                onClick={() => setIsLogin(true)}
+                className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none"
+              >
+                Sign in
+              </button>
+            </>
+          )}
+        </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -97,6 +155,52 @@ const AuthPage = () => {
           )}
 
           <form className="space-y-6" onSubmit={handleSubmit}>
+            {!isLogin && (
+              <>
+                <div>
+                  <label
+                    htmlFor="fullname"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Full Name
+                  </label>
+                  <div className="mt-1">
+                    <input
+                      id="fullname"
+                      name="fullname"
+                      type="text"
+                      autoComplete="name"
+                      required
+                      value={formData.fullname}
+                      onChange={handleChange}
+                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="phoneNumber"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Phone Number
+                  </label>
+                  <div className="mt-1">
+                    <input
+                      id="phoneNumber"
+                      name="phoneNumber"
+                      type="tel"
+                      autoComplete="tel"
+                      required
+                      value={formData.phoneNumber}
+                      onChange={handleChange}
+                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+
             <div>
               <label
                 htmlFor="email"
@@ -130,7 +234,7 @@ const AuthPage = () => {
                   id="password"
                   name="password"
                   type="password"
-                  autoComplete="current-password"
+                  autoComplete={isLogin ? "current-password" : "new-password"}
                   required
                   value={formData.password}
                   onChange={handleChange}
@@ -138,6 +242,29 @@ const AuthPage = () => {
                 />
               </div>
             </div>
+
+            {!isLogin && (
+              <div>
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Confirm Password
+                </label>
+                <div className="mt-1">
+                  <input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
+                    autoComplete="new-password"
+                    required
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
+              </div>
+            )}
 
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -211,8 +338,10 @@ const AuthPage = () => {
                     </svg>
                     Processing...
                   </>
-                ) : (
+                ) : isLogin ? (
                   "Sign in"
+                ) : (
+                  "Register"
                 )}
               </button>
             </div>
